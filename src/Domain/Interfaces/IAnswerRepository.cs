@@ -6,7 +6,7 @@ namespace Domain.Interfaces
     {
         Task<Answer> GetAnswerByIdAsync(int id);
         Task<IEnumerable<Answer>> GetAnswersByDiscussionIdAsync(int discussionId);
-        Task AddAnswerAsync(Answer answer);
+        Task CreateAnswerAsync(Answer answer);
         Task UpdateAnswerAsync(Answer answer);
         Task DeleteAnswerAsync(int id);
     }

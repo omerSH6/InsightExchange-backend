@@ -13,7 +13,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public Task AddAnswerAsync(Answer answer)
+        public Task CreateAnswerAsync(Answer answer)
         {
             throw new NotImplementedException();
         }

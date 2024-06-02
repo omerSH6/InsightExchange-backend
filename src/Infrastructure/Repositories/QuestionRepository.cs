@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class QuestionRepository : IDiscussionRepository
+    public class QuestionRepository : IQuestionRepository
     {
         private readonly InsightExchangeDbContext _context;
 
@@ -14,7 +14,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Question> GetDiscussionByIdAsync(int id)
+        public async Task<Question> GetByIdAsync(int id)
         {
             return await _context.Discussions.Include(d => d.Tags).Include(d => d.Answers).FirstOrDefaultAsync(d => d.Id == id);
         }

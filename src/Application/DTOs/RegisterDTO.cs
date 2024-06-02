@@ -1,8 +1,8 @@
-﻿namespace Domain.Entities
+﻿
+namespace Application.DTOs
 {
-    public class User
+    public class RegisterDTO
     {
-        public int Id { get; set; }
         public required string UserName { get; set; }
         public required string Email { get; set; }
         public required string PasswordHash { get; set; }

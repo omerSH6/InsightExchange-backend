@@ -2,7 +2,7 @@
 {
     public interface IMediator
     {
-        Task SendAsync<TRequest>(TRequest request);
-        Task<TResponse> Send<TRequest, TResponse>(TRequest request);
+        Task<ResultDto<bool>> SendAsync<TRequest>(TRequest request);
+        Task<ResultDto<TResponse>> Send<TRequest, TResponse>(TRequest request);
     }
 }

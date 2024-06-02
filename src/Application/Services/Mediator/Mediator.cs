@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Application.Services.Mediator.Interfaces;
+﻿using Application.Services.Mediator.Interfaces;
 
 namespace Application.Services.Mediator
 {
@@ -14,7 +13,7 @@ namespace Application.Services.Mediator
             _mediatorRequestHandlersManager = MediatorRequestHandlersManager.Instance;
         }
 
-        public async Task SendAsync<TRequest>(TRequest request)
+        public async Task<ResultDto<bool>> SendAsync<TRequest>(TRequest request)
         {
 
             var requestHandler = _mediatorRequestHandlersManager.GetRequestHandler(typeof(TRequest));
@@ -24,10 +23,10 @@ namespace Application.Services.Mediator
                 throw new InvalidOperationException($"No handler found for request of type {typeof(TRequest).Name}");
             }
 
-            await requestHandlerInstance.Handle(request);
+            return await requestHandlerInstance.Handle(request);
         }
 
-        public async Task<TResponse> Send<TRequest, TResponse>(TRequest request)
+        public async Task<ResultDto<TResponse>> Send<TRequest, TResponse>(TRequest request)
         {
             var requestHandler = _mediatorRequestHandlersManager.GetRequestHandler(typeof(TRequest));
             var requestHandlerInstance = _serviceProvider.GetService(requestHandler) as IRequestHandler<TRequest, TResponse>;

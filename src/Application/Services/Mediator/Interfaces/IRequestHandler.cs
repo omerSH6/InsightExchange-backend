@@ -2,11 +2,11 @@
 {
     public interface IRequestHandler<TRequest, TResponse>
     {
-        Task<TResponse> Handle(TRequest request);
+        Task<ResultDto<TResponse>> Handle(TRequest request);
     }
 
     public interface IRequestHandler<TRequest>
     {
-        Task Handle(TRequest request);
+        Task<ResultDto<bool>> Handle(TRequest request);
     }
 }
