@@ -6,7 +6,7 @@
         public required string Title { get; set; }
         public required string Content { get; set; }
         public DateTime CreatedAt { get; set; }
-        public required UserDTO User { get; set; }
+        public UserDTO User { get; set; }
         public bool WasAskedByCurrentUser { get; set; }
         public bool WasVotedByCurrentUser { get; set; }
         public int TotalVotes { get; set; }

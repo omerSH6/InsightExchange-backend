@@ -27,7 +27,11 @@ namespace Application.Questions.Queries
             var requestedQuestingId = request.Id;
             var authenticatedUserId = _userService.GetAuthenticatedUserIfExist();
             var question = await _questionRepository.GetByIdAsync(requestedQuestingId);
-           
+
+            if (question == null)
+            {
+                return ResultDto<QuestionDTO>.Fail($"The question with the id of {requestedQuestingId} not exist");
+            }
 
             var questionDTO = new QuestionDTO()
             {
@@ -40,8 +44,8 @@ namespace Application.Questions.Queries
                     Id = question.User.Id,
                     UserName = question.User.UserName
                 },
-                WasAskedByCurrentUser = question.User.Id == authenticatedUserId,
-                WasVotedByCurrentUser = question.Votes.Any(vote => vote.User.Id == authenticatedUserId),
+                WasAskedByCurrentUser = authenticatedUserId.HasValue && question.User.Id == authenticatedUserId,
+                WasVotedByCurrentUser = question.Votes.Any(vote => authenticatedUserId.HasValue && vote.User.Id == authenticatedUserId),
                 TotalVotes = question.Votes.Where(vote => vote.isPositiveVote).ToList().Count() - question.Votes.Where(vote => !vote.isPositiveVote).ToList().Count(),
                 Answers = question.Answers.Select(answare => new AnswerDTO()
                 {
@@ -53,10 +57,11 @@ namespace Application.Questions.Queries
                         Id = answare.User.Id,
                         UserName = answare.User.UserName
                     },
-                    WasReipaiedByCurrentUser = answare.Id == authenticatedUserId,
-                    WasVotedByCurrentUser = answare.Votes.Any(vote => vote.User.Id == authenticatedUserId),
+                    WasReipaiedByCurrentUser = authenticatedUserId.HasValue && answare.Id == authenticatedUserId,
+                    WasVotedByCurrentUser = answare.Votes.Any(vote =>authenticatedUserId.HasValue &&  vote.User.Id == authenticatedUserId),
                     TotalVotes = answare.Votes.Where(vote => vote.isPositiveVote).ToList().Count() - answare.Votes.Where(vote => !vote.isPositiveVote).ToList().Count(),
                 }).ToList(),
+                Tags = question.Tags.Select(tag=> new TagDTO() { Name = tag.Name, Id = tag.Id}).ToList(),
             };
 
             return ResultDto<QuestionDTO>.Success(questionDTO);

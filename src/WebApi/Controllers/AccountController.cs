@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : BaseApiController
@@ -17,7 +16,7 @@ namespace WebApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] CreateNewUserCommand command)
         {
-            var result = await _mediator.Send<CreateNewUserCommand, bool>(command);
+            var result = await _mediator.SendAsync<CreateNewUserCommand>(command);
             if (!result.IsSuccess)
             {
                 return NotFound(result.ErrorMessage);
@@ -36,9 +35,7 @@ namespace WebApi.Controllers
                 return Unauthorized();
             }
 
-            var token = result.Data.LoginToken;
-
-            return Ok(token);
+            return Ok(result.Data);
         }
     }
 }

@@ -18,7 +18,8 @@ namespace Application.Services.Mediator
         {
 
             var requestHandler = _mediatorRequestHandlersManager.GetRequestHandler(typeof(TRequest));
-            var requestHandlerInstance = _serviceProvider.GetService(requestHandler) as IRequestHandler<TRequest>;
+            var @interface = requestHandler.GetInterfaces().Where(i => i.IsGenericType && (i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>) || i.GetGenericTypeDefinition() == typeof(IRequestHandler<>))).First();
+            var requestHandlerInstance = _serviceProvider.GetService(@interface) as IRequestHandler<TRequest>;
             if (requestHandlerInstance == null)
             {
                 throw new InvalidOperationException($"No handler found for request of type {typeof(TRequest).Name}");
@@ -30,7 +31,8 @@ namespace Application.Services.Mediator
         public async Task<ResultDto<TResponse>> Send<TRequest, TResponse>(TRequest request)
         {
             var requestHandler = _mediatorRequestHandlersManager.GetRequestHandler(typeof(TRequest));
-            var requestHandlerInstance = _serviceProvider.GetService(requestHandler) as IRequestHandler<TRequest, TResponse>;
+            var @interface = requestHandler.GetInterfaces().Where(i => i.IsGenericType && (i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>) || i.GetGenericTypeDefinition() == typeof(IRequestHandler<>))).First();
+            var requestHandlerInstance = _serviceProvider.GetService(@interface) as IRequestHandler<TRequest, TResponse>;
             if (requestHandlerInstance == null)
             {
                 throw new InvalidOperationException($"No handler found for request of type {typeof(TRequest).Name}");

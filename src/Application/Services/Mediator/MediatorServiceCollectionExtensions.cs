@@ -13,7 +13,8 @@ namespace Application.Services.Mediator
 
             foreach (var requestHandler in requestHandlers)
             {
-                services.AddScoped(requestHandler.Key, requestHandler.Value);
+                var @interface = requestHandler.Value.GetInterfaces().Where(i => i.IsGenericType && (i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>) || i.GetGenericTypeDefinition() == typeof(IRequestHandler<>))).First();
+                services.AddScoped(@interface, requestHandler.Value);
             }
         }
     }

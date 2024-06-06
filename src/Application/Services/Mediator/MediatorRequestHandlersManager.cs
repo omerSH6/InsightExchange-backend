@@ -30,7 +30,8 @@ namespace Application.Services.Mediator
             foreach (var handlerType in handlerTypes)
             {
                 var @interface = handlerType.GetInterfaces().Where(i => i.IsGenericType && (i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>) || i.GetGenericTypeDefinition() == typeof(IRequestHandler<>))).First();
-                _requestHandlers[@interface] = handlerType;
+                var requestType = @interface.GetGenericArguments()[0];
+                _requestHandlers[requestType] = handlerType;
             }
         }
     }

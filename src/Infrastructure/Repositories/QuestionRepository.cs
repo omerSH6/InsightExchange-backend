@@ -17,7 +17,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Question> GetByIdAsync(int id)
         {
-            return await _context.Questions.Include(d => d.Tags).Include(d => d.Answers).FirstOrDefaultAsync(d => d.Id == id);
+            return await _context.Questions.Include(d => d.Tags).Include(d => d.Answers).Include(d => d.User).FirstOrDefaultAsync(d => d.Id == id);
         }
 
         public async Task<List<Question>> GetTaggedSortedQuestionsWithPaginationAsync(string? tagName, SortBy sortBy, SortDirection sortDirection, int page, int pageSize)
@@ -45,6 +45,7 @@ namespace Infrastructure.Repositories
             query = query.Skip((page - 1) * pageSize).Take(pageSize);
 
             // Execute the query and return the result
+            query = query.Include(q => q.User).Include(q => q.Tags);
             return await query.ToListAsync();
         }
 

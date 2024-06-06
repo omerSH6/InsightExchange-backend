@@ -32,7 +32,7 @@ namespace WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
+        [HttpGet("Preview")]
         public async Task<ActionResult<List<QuestionPreviewDTO>>> GetQuestionsAsync([FromQuery] GetQuestionsQuery query)
         {
             var result = await _mediator.Send<GetQuestionsQuery, List<QuestionPreviewDTO>>(query);
@@ -45,7 +45,7 @@ namespace WebApi.Controllers
             return Ok(result.Data);
         }
 
-        [HttpPost("question")]
+        [HttpPost]
         public async Task<ActionResult<QuestionDTO>> Question([FromBody] CreateQuestionCommand command)
         {
             var result = await _mediator.Send<CreateQuestionCommand, QuestionDTO>(command);
