@@ -10,14 +10,10 @@ namespace Infrastructure.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Question> Discussions { get; set; }
+        public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Tag> Tags { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            // Configure relationships and constraints here
-        }
+        public DbSet<AnswerVote> AnswerVote { get; set; }
+        public DbSet<QuestionVote> QuestionVote { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Answers.Commands;
+using Application.DTOs;
 using Application.Services.Mediator.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +13,9 @@ namespace WebApi.Controllers
             : base(mediator) { }
 
         [HttpPost("answer")]
-        public async Task<IActionResult> Answer([FromBody] CreateAnswerCommand command)
+        public async Task<ActionResult<AnswerDTO>> Answer([FromBody] CreateAnswerCommand command)
         {
-            var result = await _mediator.Send<CreateAnswerCommand, bool>(command);
+            var result = await _mediator.Send<CreateAnswerCommand, AnswerDTO>(command);
 
             if (!result.IsSuccess)
             {

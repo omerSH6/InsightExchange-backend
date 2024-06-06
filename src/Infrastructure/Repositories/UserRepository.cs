@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -13,41 +14,25 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public Task AddUserAsync(User user)
+        public async Task AddUserAsync(User user)
         {
-            throw new NotImplementedException();
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteUserAsync(int id)
+        public async Task<User> GetUserByEmailAsync(string email)
         {
-            throw new NotImplementedException();
+            return await _context.Users.Where(user => user.Email.Equals(email)).FirstOrDefaultAsync();
         }
 
-        public Task<User> GetUserByEmailAsync(string email)
+        public async Task<User> GetUserByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
         }
 
-        public Task<User> GetUserByIdAsync(int id)
+        public async Task<User> GetUserByUserNameAsync(string userName)
         {
-            throw new NotImplementedException();
+            return await _context.Users.Where(user => user.UserName.Equals(userName)).FirstOrDefaultAsync();
         }
-
-        public Task<User> GetUserByUserNameAsync(string userName)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<User>> GetUsersAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateUserAsync(User user)
-        {
-            throw new NotImplementedException();
-        }
-
-        // Implement interface methods
     }
 }

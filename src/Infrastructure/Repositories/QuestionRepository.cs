@@ -17,41 +17,41 @@ namespace Infrastructure.Repositories
 
         public async Task<Question> GetByIdAsync(int id)
         {
-            return await _context.Discussions.Include(d => d.Tags).Include(d => d.Answers).FirstOrDefaultAsync(d => d.Id == id);
+            return await _context.Questions.Include(d => d.Tags).Include(d => d.Answers).FirstOrDefaultAsync(d => d.Id == id);
         }
 
-        public async Task<IEnumerable<Question>> GetDiscussionsAsync()
+        public async Task<List<Question>> GetTaggedSortedQuestionsWithPaginationAsync(string? tagName, SortBy sortBy, SortDirection sortDirection, int page, int pageSize)
         {
-            return await _context.Discussions.Include(d => d.Tags).ToListAsync();
+            // Start building the query
+            var query = _context.Questions.AsQueryable();
+
+            // Apply filtering by tag name if provided
+            if (!string.IsNullOrWhiteSpace(tagName))
+            {
+                query = query.Where(q => q.Tags.Select(tag=>tag.Name).Contains(tagName));
+            }
+
+            // Apply sorting
+            switch (sortBy)
+            {
+                case SortBy.CreationDate:
+                    query = sortDirection == SortDirection.Ascending ? query.OrderBy(q => q.CreatedAt) : query.OrderByDescending(q => q.CreatedAt);
+                    break;
+                default:
+                    throw new ArgumentException("Invalid sort by option.", nameof(sortBy));
+            }
+
+            // Apply pagination
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+
+            // Execute the query and return the result
+            return await query.ToListAsync();
         }
 
-        public async Task AddDiscussionAsync(Question discussion)
+        public async Task CreateQuestionAsync(Question answer)
         {
-            _context.Discussions.Add(discussion);
+            _context.Questions.Add(answer);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task UpdateDiscussionAsync(Question discussion)
-        {
-            _context.Entry(discussion).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task DeleteDiscussionAsync(int id)
-        {
-            var discussion = await _context.Discussions.FindAsync(id);
-            _context.Discussions.Remove(discussion);
-            await _context.SaveChangesAsync();
-        }
-
-        public Task<List<Question>> GetTaggedSortedQuestionsWithPaginationAsync(string? tagName, SortBy sortBy, SortDirection sortDirection, int page, int pageSize)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task CreateQuestionAsync(Question answer)
-        {
-            throw new NotImplementedException();
         }
     }
 }

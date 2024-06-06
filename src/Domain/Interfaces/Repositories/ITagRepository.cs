@@ -7,6 +7,5 @@ namespace Domain.Interfaces.Repositories
         public Task CreateTagAsync(string tagName);
         public Task<List<Tag>> GetAllTagsAsync();
         public Task<List<Tag>> GetByNamesAsync(List<string> names);
-        public Task<Tag> GetByNameAsync(string name);
     }
 }

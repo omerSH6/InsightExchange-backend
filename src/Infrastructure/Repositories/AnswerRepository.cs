@@ -13,31 +13,15 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public Task CreateAnswerAsync(Answer answer)
+        public async Task CreateAnswerAsync(Answer answer)
         {
-            throw new NotImplementedException();
+            _context.Answers.Add(answer);
+            await _context.SaveChangesAsync();
         }
 
-        public Task DeleteAnswerAsync(int id)
+        public async Task<Answer> GetAnswerByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Answers.FindAsync(id);
         }
-
-        public Task<Answer> GetAnswerByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Answer>> GetAnswersByDiscussionIdAsync(int discussionId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task UpdateAnswerAsync(Answer answer)
-        {
-            throw new NotImplementedException();
-        }
-
-        // Implement interface methods
     }
 }

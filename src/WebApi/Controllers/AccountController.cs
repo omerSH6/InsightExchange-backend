@@ -27,7 +27,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserLoginCommand command)
+        public async Task<ActionResult<UserLoginTokenDTO>> Login([FromBody] UserLoginCommand command)
         {
             var result = await _mediator.Send<UserLoginCommand, UserLoginTokenDTO>(command);
 
@@ -38,7 +38,7 @@ namespace WebApi.Controllers
 
             var token = result.Data.LoginToken;
 
-            return Ok(new { Token = token });
+            return Ok(token);
         }
     }
 }

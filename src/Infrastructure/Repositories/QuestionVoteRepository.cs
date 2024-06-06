@@ -1,13 +1,22 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces.Repositories;
+using Infrastructure.Data;
 
 namespace Infrastructure.Repositories
 {
     public class QuestionVoteRepository : IQuestionVoteRepository
     {
-        public Task CreateQuestionVoteAsync(QuestionVote questionVote)
+        private readonly InsightExchangeDbContext _context;
+
+        public QuestionVoteRepository(InsightExchangeDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+
+        public async Task CreateQuestionVoteAsync(QuestionVote questionVote)
+        {
+            _context.QuestionVote.Add(questionVote);
+            await _context.SaveChangesAsync();
         }
     }
 }

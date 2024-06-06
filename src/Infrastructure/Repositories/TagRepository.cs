@@ -1,28 +1,34 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces.Repositories;
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
     public class TagRepository : ITagRepository
     {
-        public Task CreateTagAsync(string tagName)
+        private readonly InsightExchangeDbContext _context;
+
+        public TagRepository(InsightExchangeDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<List<Tag>> GetAllTagsAsync()
+        public async Task CreateTagAsync(string tagName)
         {
-            throw new NotImplementedException();
+            var newTag = new Tag() { Name = tagName };
+            _context.Tags.Add(newTag);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<Tag> GetByNameAsync(string name)
+        public async Task<List<Tag>> GetAllTagsAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Tags.ToListAsync();
         }
 
-        public Task<List<Tag>> GetByNamesAsync(List<string> names)
+        public async Task<List<Tag>> GetByNamesAsync(List<string> names)
         {
-            throw new NotImplementedException();
+            return await _context.Tags.Where(tag=>names.Contains(tag.Name)).ToListAsync();
         }
     }
 }

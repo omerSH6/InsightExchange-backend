@@ -5,12 +5,12 @@ using WebApi.OptionsSetup;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMediator();
+
 builder.Services.AddControllers();
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.AddInfrastructureServices(builder.Configuration);
-
+builder.Services.AddMediator();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();
 

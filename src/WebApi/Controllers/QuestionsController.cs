@@ -1,4 +1,5 @@
 ﻿using Application.Answers.Commands;
+using Application.DTOs;
 using Application.Questions.Commands;
 using Application.Questions.Queries;
 using Application.Services.Mediator.Interfaces;
@@ -17,10 +18,10 @@ namespace WebApi.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetQuestionByIdAsync([FromQuery] GetQuestionQuery query)
+        public async Task<ActionResult<QuestionDTO>> GetQuestionByIdAsync([FromQuery] GetQuestionQuery query)
         {
            
-            var result = await _mediator.SendAsync(query);
+            var result = await _mediator.Send<GetQuestionQuery, QuestionDTO>(query);
 
             if (!result.IsSuccess)
             {
@@ -32,9 +33,9 @@ namespace WebApi.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetQuestionsAsync([FromQuery] GetQuestionsQuery query)
+        public async Task<ActionResult<List<QuestionPreviewDTO>>> GetQuestionsAsync([FromQuery] GetQuestionsQuery query)
         {
-            var result = await _mediator.SendAsync(query);
+            var result = await _mediator.Send<GetQuestionsQuery, List<QuestionPreviewDTO>>(query);
 
             if (!result.IsSuccess)
             {
@@ -45,9 +46,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("question")]
-        public async Task<IActionResult> Question([FromBody] CreateQuestionCommand command)
+        public async Task<ActionResult<QuestionDTO>> Question([FromBody] CreateQuestionCommand command)
         {
-            var result = await _mediator.Send<CreateQuestionCommand, bool>(command);
+            var result = await _mediator.Send<CreateQuestionCommand, QuestionDTO>(command);
 
             if (!result.IsSuccess)
             {
