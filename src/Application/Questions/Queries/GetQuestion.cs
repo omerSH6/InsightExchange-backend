@@ -1,7 +1,8 @@
-﻿using Application.Services.Mediator;
+﻿using Application.DTOs;
 using Application.Services.Mediator.Interfaces;
-using Domain.DTOs;
-using Domain.Interfaces;
+using Domain.Interfaces.Authentication;
+using Domain.Interfaces.Repositories;
+using Domain.Shared;
 
 namespace Application.Questions.Queries
 {
@@ -13,21 +14,24 @@ namespace Application.Questions.Queries
     public class GetDiscussionHandler : IRequestHandler<GetQuestionQuery, QuestionDTO>
     {
         private readonly IQuestionRepository _questionRepository;
+        private readonly IUserService _userService;
 
-        public GetDiscussionHandler(IQuestionRepository questionRepository)
+        public GetDiscussionHandler(IQuestionRepository questionRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
+            _userService = userService;
         }
 
         public async Task<ResultDto<QuestionDTO>> Handle(GetQuestionQuery request)
         {
             var requestedQuestingId = request.Id;
-            var authenticatedUserId = 1123;
+            var authenticatedUserId = _userService.GetAuthenticatedUserIfExist();
             var question = await _questionRepository.GetByIdAsync(requestedQuestingId);
            
 
             var questionDTO = new QuestionDTO()
             {
+                Title = question.Title,
                 Id = question.Id,
                 Content = question.Content,
                 CreatedAt = question.CreatedAt,

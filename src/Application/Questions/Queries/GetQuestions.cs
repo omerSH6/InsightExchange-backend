@@ -1,15 +1,16 @@
-﻿using Application.Services.Mediator;
+﻿using Application.DTOs;
 using Application.Services.Mediator.Interfaces;
-using Domain.DTOs;
 using Domain.Entities;
 using Domain.Enums;
-using Domain.Interfaces;
+using Domain.Interfaces.Authentication;
+using Domain.Interfaces.Repositories;
+using Domain.Shared;
 
 namespace Application.Questions.Queries
 {
     public class GetQuestionsQuery : IRequest<List<QuestionPreviewDTO>>
     {
-        public required string Tag { get; set; }
+        public string? Tag { get; set; }
         public required SortBy SortBy { get; set; }
         public required SortDirection SortDirection { get; set; }
         public int Page { get; set; }
@@ -19,30 +20,24 @@ namespace Application.Questions.Queries
     public class GetQuestionsHandler : IRequestHandler<GetQuestionsQuery, List<QuestionPreviewDTO>>
     {
         private readonly IQuestionRepository _questionRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly ITagRepository _tagRepository;
+        private readonly IUserService _userService;
 
-        public GetQuestionsHandler(IQuestionRepository questionRepository, IUserRepository userRepository, ITagRepository tagRepository)
+        public GetQuestionsHandler(IQuestionRepository questionRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
-            _userRepository = userRepository;
-            _tagRepository = tagRepository;
+            _userService = userService;
         }
 
         public async Task<ResultDto<List<QuestionPreviewDTO>>> Handle(GetQuestionsQuery request)
         {
-            var authenticatedUserId = 1123;
-
-            var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
-            var tag = await _tagRepository.GetByNameAsync(request.Tag);
-
-            var questions = await _questionRepository.GetTaggedSortedQuestionsWithPaginationAsync(tag, request.SortBy, request.SortDirection, request.Page, request.PageSize);
+            var authenticatedUserId = _userService.GetAuthenticatedUserIfExist();
+            var questions = await _questionRepository.GetTaggedSortedQuestionsWithPaginationAsync(request.Tag, request.SortBy, request.SortDirection, request.Page, request.PageSize);
             var questionsPreview = questions.Select(question => QuestionToQuestionPreviewDTO(question, authenticatedUserId)).ToList();
 
             return ResultDto<List<QuestionPreviewDTO>>.Success(questionsPreview);
         }
 
-        private static QuestionPreviewDTO QuestionToQuestionPreviewDTO(Question question, int AuthenticatedUserId)
+        private static QuestionPreviewDTO QuestionToQuestionPreviewDTO(Question question, int? AuthenticatedUserId)
         {
             var userDto = new UserDTO() 
             {
@@ -53,6 +48,7 @@ namespace Application.Questions.Queries
             var questionPreviewDTO = new QuestionPreviewDTO()
             {
                 Id = question.Id,
+                Title = question.Title,
                 PreviewContent = question.Content.Length > 20 ? question.Content.Take(20).ToString() : question.Content,
                 CreatedAt = question.CreatedAt,
                 User = userDto,

@@ -1,4 +1,4 @@
-﻿namespace Application.Services.Mediator
+﻿namespace Domain.Shared
 {
     public class ResultDto<TData>
     {

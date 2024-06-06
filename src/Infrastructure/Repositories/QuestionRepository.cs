@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
-using Domain.Interfaces;
+using Domain.Enums;
+using Domain.Interfaces.Repositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,6 +42,16 @@ namespace Infrastructure.Repositories
             var discussion = await _context.Discussions.FindAsync(id);
             _context.Discussions.Remove(discussion);
             await _context.SaveChangesAsync();
+        }
+
+        public Task<List<Question>> GetTaggedSortedQuestionsWithPaginationAsync(string? tagName, SortBy sortBy, SortDirection sortDirection, int page, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CreateQuestionAsync(Question answer)
+        {
+            throw new NotImplementedException();
         }
     }
 }

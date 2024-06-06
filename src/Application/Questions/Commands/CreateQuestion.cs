@@ -1,33 +1,37 @@
-﻿using Application.Services.Mediator;
+﻿using Application.DTOs;
 using Application.Services.Mediator.Interfaces;
 using Domain.Entities;
-using Domain.Interfaces;
+using Domain.Interfaces.Authentication;
+using Domain.Interfaces.Repositories;
+using Domain.Shared;
 
 namespace Application.Questions.Commands
 {
-    public class CreateQuestionCommand : IRequest
+    public class CreateQuestionCommand : IRequest<QuestionDTO>
     {
+        public required string Title { get; set; }
         public required string Content { get; set; }
         public List<string> Tags { get; set; } = new List<string>();
     }
 
-    public class CreateQuestionHandler : IRequestHandler<CreateQuestionCommand>
+    public class CreateQuestionHandler : IRequestHandler<CreateQuestionCommand, QuestionDTO>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         private readonly ITagRepository _tagRepository;
+        private readonly IUserService _userService;
 
-        public CreateQuestionHandler(IQuestionRepository questionRepository, IUserRepository userRepository, ITagRepository tagRepository)
+        public CreateQuestionHandler(IQuestionRepository questionRepository, IUserRepository userRepository, ITagRepository tagRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;
             _tagRepository = tagRepository;
+            _userService = userService;
         }
 
-        public async Task<ResultDto<bool>> Handle(CreateQuestionCommand request)
+        public async Task<ResultDto<QuestionDTO>> Handle(CreateQuestionCommand request)
         {
-            var authenticatedUserId = 1123;
-
+            var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
             var existingTags = await _tagRepository.GetAllTagsAsync();
 
@@ -43,6 +47,7 @@ namespace Application.Questions.Commands
 
             var question = new Question() 
             {
+                Title = request.Title,
                 Content = request.Content,
                 CreatedAt = DateTime.UtcNow,
                 UserId = user.Id,
@@ -52,7 +57,29 @@ namespace Application.Questions.Commands
 
             await _questionRepository.CreateQuestionAsync(question);
 
-            return ResultDto<bool>.Success(true);
+            var questionDto = new QuestionDTO() 
+            {
+                Id = question.Id,
+                Title = question.Title,
+                Content = question.Content,
+                CreatedAt = question.CreatedAt,
+                User = new UserDTO()
+                {
+                    Id=user.Id,
+                    UserName = user.UserName,
+
+                },
+                WasAskedByCurrentUser = true,
+                WasVotedByCurrentUser = false,
+                TotalVotes = 0,
+                Answers = new List<AnswerDTO>(),
+                Tags = question.Tags.Select(tag => new TagDTO() 
+                {
+                    Id = tag.Id,
+                    Name = tag.Name,
+                }).ToList(),
+            };
+            return ResultDto<QuestionDTO>.Success(questionDto);
         }
     }
 }

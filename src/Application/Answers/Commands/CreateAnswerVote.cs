@@ -1,7 +1,8 @@
 ﻿using Application.Services.Mediator.Interfaces;
-using Application.Services.Mediator;
 using Domain.Entities;
-using Domain.Interfaces;
+using Domain.Interfaces.Authentication;
+using Domain.Interfaces.Repositories;
+using Domain.Shared;
 
 namespace Application.Answers.Commands
 {
@@ -16,17 +17,19 @@ namespace Application.Answers.Commands
         private readonly IAnswerRepository _answerRepository;
         private readonly IUserRepository _userRepository;
         private readonly IAnswerVoteRepository _AnswerVoteRepository;
+        private readonly IUserService _userService;
 
-        public CreateAnswerVoteHandler(IAnswerRepository answerRepository, IUserRepository userRepository, IAnswerVoteRepository answerVoteRepository)
+        public CreateAnswerVoteHandler(IAnswerRepository answerRepository, IUserRepository userRepository, IAnswerVoteRepository answerVoteRepository, IUserService userService)
         {
             _answerRepository = answerRepository;
             _userRepository = userRepository;
             _AnswerVoteRepository = answerVoteRepository;
+            _userService = userService;
         }
 
         public async Task<ResultDto<bool>> Handle(CreateAnswerVote request)
         {
-            var authenticatedUserId = 1123;
+            var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
             var answer = await _answerRepository.GetAnswerByIdAsync(request.AnswerId);
 
