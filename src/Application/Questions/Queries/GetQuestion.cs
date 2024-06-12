@@ -2,7 +2,6 @@
 using Application.Common.Services.Mediator.Interfaces;
 using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
-using Domain.Shared;
 
 namespace Application.Questions.Queries
 {
@@ -11,18 +10,18 @@ namespace Application.Questions.Queries
         public int Id { get; set; }
     }
 
-    public class GetDiscussionHandler : IRequestHandler<GetQuestionQuery, QuestionDTO>
+    public class GetQuestionHandler : IRequestHandler<GetQuestionQuery, QuestionDTO>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserService _userService;
 
-        public GetDiscussionHandler(IQuestionRepository questionRepository, IUserService userService)
+        public GetQuestionHandler(IQuestionRepository questionRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userService = userService;
         }
 
-        public async Task<ResultDto<QuestionDTO>> Handle(GetQuestionQuery request)
+        public async Task<QuestionDTO> Handle(GetQuestionQuery request)
         {
             var requestedQuestingId = request.Id;
             var authenticatedUserId = _userService.GetAuthenticatedUserIfExist();
@@ -30,7 +29,7 @@ namespace Application.Questions.Queries
 
             if (question == null)
             {
-                return ResultDto<QuestionDTO>.Fail($"The question with the id of {requestedQuestingId} not exist");
+                throw new Exception($"The question with the id of {requestedQuestingId} not exist");
             }
 
             var questionDTO = new QuestionDTO()
@@ -64,7 +63,7 @@ namespace Application.Questions.Queries
                 Tags = question.Tags.Select(tag=> new TagDTO() { Name = tag.Name, Id = tag.Id}).ToList(),
             };
 
-            return ResultDto<QuestionDTO>.Success(questionDTO);
+            return questionDTO;
         }
     }
 }

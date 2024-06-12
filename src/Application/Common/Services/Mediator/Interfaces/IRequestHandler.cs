@@ -1,14 +1,14 @@
-﻿using Domain.Shared;
-
-namespace Application.Common.Services.Mediator.Interfaces
+﻿namespace Application.Common.Services.Mediator.Interfaces
 {
     public interface IRequestHandler<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
     {
-        Task<ResultDto<TResponse>> Handle(TRequest request);
+        Task<TResponse> Handle(TRequest request);
     }
 
     public interface IRequestHandler<TRequest>
+        where TRequest : IRequest
     {
-        Task<ResultDto<bool>> Handle(TRequest request);
+        Task Handle(TRequest request);
     }
 }

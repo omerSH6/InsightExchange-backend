@@ -19,42 +19,23 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<QuestionDTO>> GetQuestion([FromQuery] GetQuestionQuery query)
         {
-           
-            var result = await _mediator.Send<GetQuestionQuery, QuestionDTO>(query);
-
-            if (!result.IsSuccess)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Data);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [AllowAnonymous]
         [HttpGet("pagination")]
         public async Task<ActionResult<List<QuestionPreviewDTO>>> GetQuestionsWithPagination([FromQuery] GetQuestionsQuery query)
         {
-            var result = await _mediator.Send<GetQuestionsQuery, List<QuestionPreviewDTO>>(query);
-
-            if (!result.IsSuccess)
-            {
-                return NotFound();
-            }
-
-            return Ok(result.Data);
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
 
         [HttpPost]
         public async Task<ActionResult<QuestionDTO>> CreateQuestion([FromBody] CreateQuestionCommand command)
         {
-            var result = await _mediator.Send<CreateQuestionCommand, QuestionDTO>(command);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Data);
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }

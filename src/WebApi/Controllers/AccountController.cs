@@ -15,26 +15,15 @@ namespace WebApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] CreateNewUserCommand command)
         {
-            var result = await _mediator.SendAsync<CreateNewUserCommand>(command);
-            if (!result.IsSuccess)
-            {
-                return NotFound(result.ErrorMessage);
-            }
-
+            await _mediator.Send(command);
             return Ok(new { Message = "User registered successfully" });
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<UserLoginTokenDTO>> Login([FromBody] UserLoginCommand command)
         {
-            var result = await _mediator.Send<UserLoginCommand, UserLoginTokenDTO>(command);
-
-            if (!result.IsSuccess)
-            {
-                return Unauthorized();
-            }
-
-            return Ok(result.Data);
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }

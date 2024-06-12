@@ -24,18 +24,18 @@ namespace Application.Users.Commands
             _passwordHashService = passwordHashService;
         }
 
-        public async Task<ResultDto<bool>> Handle(CreateNewUserCommand request)
+        public async Task Handle(CreateNewUserCommand request)
         {
             var user = await _userRepository.GetUserByEmailAsync(request.Email);
             if (user != null)
             {
-                return ResultDto<bool>.Fail("user with this email already exist");
+                throw new Exception("user with this email already exist");
             }
             
             user = await _userRepository.GetUserByUserNameAsync(request.UserName);
             if (user != null)
             {
-                return ResultDto<bool>.Fail("user with this user name already exist");
+                throw new Exception("user with this user name already exist");
             }
 
             var passwordHash = _passwordHashService.HashPassword(request.Password);
@@ -48,8 +48,6 @@ namespace Application.Users.Commands
             };
 
             await _userRepository.AddUserAsync(newUser);
-
-            return ResultDto<bool>.Success(true);
         }
     }
 }

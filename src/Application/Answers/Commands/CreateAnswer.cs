@@ -28,7 +28,7 @@ namespace Application.Answers.Commands
             _userService = userService;
         }
 
-        async Task<ResultDto<AnswerDTO>> IRequestHandler<CreateAnswerCommand, AnswerDTO>.Handle(CreateAnswerCommand request)
+        async Task<AnswerDTO> IRequestHandler<CreateAnswerCommand, AnswerDTO>.Handle(CreateAnswerCommand request)
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
@@ -36,7 +36,7 @@ namespace Application.Answers.Commands
 
             if (question == null)
             {
-                return ResultDto<AnswerDTO>.Fail($"Question with id: {request.QuestionId} does not exist");
+                throw new Exception($"Question with id: {request.QuestionId} does not exist");
             }
 
             var answer = new Answer() 
@@ -67,7 +67,7 @@ namespace Application.Answers.Commands
 
             };
 
-            return ResultDto<AnswerDTO>.Success(answerDto);
+            return answerDto;
         }
     }
 }

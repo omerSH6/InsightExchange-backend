@@ -16,14 +16,8 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ActionResult<AnswerDTO>> Answer([FromBody] CreateAnswerCommand command)
         {
-            var result = await _mediator.Send<CreateAnswerCommand, AnswerDTO>(command);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest();
-            }
-
-            return Ok(result.Data);
+            var result = await _mediator.Send(command);
+            return Ok(result);
         }
     }
 }

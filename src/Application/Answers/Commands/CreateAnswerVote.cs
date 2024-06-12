@@ -27,7 +27,7 @@ namespace Application.Answers.Commands
             _userService = userService;
         }
 
-        public async Task<ResultDto<bool>> Handle(CreateAnswerVote request)
+        public async Task Handle(CreateAnswerVote request)
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
@@ -35,7 +35,7 @@ namespace Application.Answers.Commands
 
             if (answer == null)
             {
-                return ResultDto<bool>.Fail($"Answer with id: {request.AnswerId} does not exist");
+                throw new Exception($"Answer with id: {request.AnswerId} does not exist");
             }
 
             var answerVote = new AnswerVote()
@@ -49,7 +49,6 @@ namespace Application.Answers.Commands
             };
 
             await _AnswerVoteRepository.CreateAnswerVoteAsync(answerVote);
-            return ResultDto<bool>.Success(true);
         }
     }
 }

@@ -16,26 +16,14 @@ namespace WebApi.Controllers
         [HttpPost("question")]
         public async Task<IActionResult> VoteQuestion([FromBody] CreateQuestionVote command)
         {
-            var result = await _mediator.Send<CreateQuestionVote, bool>(command);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest();
-            }
-
+            await _mediator.Send(command);
             return Ok();
         }
 
         [HttpPost("answer")]
         public async Task<IActionResult> VoteAnswer([FromBody] CreateAnswerVote command)
         {
-            var result = await _mediator.Send<CreateAnswerVote, bool>(command);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest();
-            }
-
+            await _mediator.Send(command);
             return Ok();
         }
     }

@@ -9,12 +9,11 @@ namespace Application.Common.Services.Mediator
         {
             services.AddScoped<IMediator, Mediator>();
 
-            var requestHandlers = MediatorRequestHandlersManager.Instance.GetAllRequestHandlers();
+            var requestHandlersInterfacesAndImplementation = MediatorRequestsManager.Instance.GetAllRequestHandlersInterfacesAndImplementation();
 
-            foreach (var requestHandler in requestHandlers)
+            foreach (var (requestHandlerInterface, requestHandlerImplementation) in requestHandlersInterfacesAndImplementation)
             {
-                var @interface = requestHandler.Value.GetInterfaces().Where(i => i.IsGenericType && (i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>) || i.GetGenericTypeDefinition() == typeof(IRequestHandler<>))).First();
-                services.AddScoped(@interface, requestHandler.Value);
+                services.AddTransient(requestHandlerImplementation);
             }
         }
     }

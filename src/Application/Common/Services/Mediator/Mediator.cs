@@ -1,44 +1,31 @@
 ﻿using Application.Common.Services.Mediator.Interfaces;
-using Domain.Shared;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.Common.Services.Mediator
 {
     public class Mediator : IMediator
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IMediatorRequestHandlersManager _mediatorRequestHandlersManager;
+        private readonly IMediatorRequestsManager _mediatorRequestHandlersManager;
 
         public Mediator(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _mediatorRequestHandlersManager = MediatorRequestHandlersManager.Instance;
+            _mediatorRequestHandlersManager = MediatorRequestsManager.Instance;
         }
 
-        public async Task<ResultDto<bool>> SendAsync<TRequest>(TRequest request)
+        public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
         {
-
-            var requestHandler = _mediatorRequestHandlersManager.GetRequestHandler(typeof(TRequest));
-            var @interface = requestHandler.GetInterfaces().Where(i => i.IsGenericType && (i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>) || i.GetGenericTypeDefinition() == typeof(IRequestHandler<>))).First();
-            var requestHandlerInstance = _serviceProvider.GetService(@interface) as IRequestHandler<TRequest>;
-            if (requestHandlerInstance == null)
-            {
-                throw new InvalidOperationException($"No handler found for request of type {typeof(TRequest).Name}");
-            }
-
-            return await requestHandlerInstance.Handle(request);
+            var handlerInterfaceType = _mediatorRequestHandlersManager.GetRequestHandlerInterfaceType(request.GetType());
+            dynamic handler = _serviceProvider.GetRequiredService(handlerInterfaceType);
+            return await handler.Handle((dynamic)request);
         }
 
-        public async Task<ResultDto<TResponse>> Send<TRequest, TResponse>(TRequest request)
+        public async Task Send(IRequest request)
         {
-            var requestHandler = _mediatorRequestHandlersManager.GetRequestHandler(typeof(TRequest));
-            var @interface = requestHandler.GetInterfaces().Where(i => i.IsGenericType && (i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>) || i.GetGenericTypeDefinition() == typeof(IRequestHandler<>))).First();
-            var requestHandlerInstance = _serviceProvider.GetService(@interface) as IRequestHandler<TRequest, TResponse>;
-            if (requestHandlerInstance == null)
-            {
-                throw new InvalidOperationException($"No handler found for request of type {typeof(TRequest).Name}");
-            }
-
-            return await requestHandlerInstance.Handle(request);
+            var handlerInterfaceType = _mediatorRequestHandlersManager.GetRequestHandlerInterfaceType(request.GetType());
+            dynamic handler = _serviceProvider.GetRequiredService(handlerInterfaceType);
+            await handler.Handle((dynamic)request);
         }
     }
 }

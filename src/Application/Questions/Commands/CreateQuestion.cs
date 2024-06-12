@@ -30,7 +30,7 @@ namespace Application.Questions.Commands
             _userService = userService;
         }
 
-        public async Task<ResultDto<QuestionDTO>> Handle(CreateQuestionCommand request)
+        public async Task<QuestionDTO> Handle(CreateQuestionCommand request)
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
@@ -79,7 +79,7 @@ namespace Application.Questions.Commands
                     Name = tag.Name,
                 }).ToList(),
             };
-            return ResultDto<QuestionDTO>.Success(questionDto);
+            return questionDto;
         }
     }
 }

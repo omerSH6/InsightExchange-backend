@@ -28,13 +28,13 @@ namespace Application.Questions.Queries
             _userService = userService;
         }
 
-        public async Task<ResultDto<List<QuestionPreviewDTO>>> Handle(GetQuestionsQuery request)
+        public async Task<List<QuestionPreviewDTO>> Handle(GetQuestionsQuery request)
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserIfExist();
             var questions = await _questionRepository.GetTaggedSortedQuestionsWithPaginationAsync(request.Tag, request.SortBy, request.SortDirection, request.Page, request.PageSize);
             var questionsPreview = questions.Select(question => QuestionToQuestionPreviewDTO(question, authenticatedUserId)).ToList();
 
-            return ResultDto<List<QuestionPreviewDTO>>.Success(questionsPreview);
+            return questionsPreview;
         }
 
         private static QuestionPreviewDTO QuestionToQuestionPreviewDTO(Question question, int? AuthenticatedUserId)

@@ -27,12 +27,12 @@ namespace Application.Users.Commands
             _jwtProvider = jwtProvider;
         }
 
-        public async Task<ResultDto<UserLoginTokenDTO>> Handle(UserLoginCommand request)
+        public async Task<UserLoginTokenDTO> Handle(UserLoginCommand request)
         {
             var user = await _userRepository.GetUserByEmailAsync(request.Email);
             if (user == null)
             {
-                return ResultDto<UserLoginTokenDTO>.Fail("user not exist");
+                throw new Exception("user not exist");
             }
 
             if(_passwordHashService.VerifyPasswordHash(request.Password, user.PasswordHash))
@@ -42,10 +42,10 @@ namespace Application.Users.Commands
                     LoginToken = _jwtProvider.Generate(user),
                 };
 
-                return ResultDto<UserLoginTokenDTO>.Success(UserLoginTokenDTO);
+                return UserLoginTokenDTO;
             }
 
-            return ResultDto<UserLoginTokenDTO>.Fail("wrong password");
+            throw new Exception("wrong password");
         }
     }
 }
