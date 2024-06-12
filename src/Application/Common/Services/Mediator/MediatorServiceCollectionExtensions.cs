@@ -13,7 +13,7 @@ namespace Application.Common.Services.Mediator
 
             foreach (var (requestHandlerInterface, requestHandlerImplementation) in requestHandlersInterfacesAndImplementation)
             {
-                services.AddTransient(requestHandlerImplementation);
+                services.AddTransient(requestHandlerInterface, requestHandlerImplementation);
             }
         }
     }
