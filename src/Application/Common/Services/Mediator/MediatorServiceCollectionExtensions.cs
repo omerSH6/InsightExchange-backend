@@ -1,7 +1,7 @@
-﻿using Application.Services.Mediator.Interfaces;
+﻿using Application.Common.Services.Mediator.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Application.Services.Mediator
+namespace Application.Common.Services.Mediator
 {
     public static class MediatorServiceCollectionExtensions
     {

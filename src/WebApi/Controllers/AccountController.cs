@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Application.Services.Mediator.Interfaces;
 using Application.Users.Commands;
-using Application.DTOs;
 using Microsoft.AspNetCore.Authorization;
+using Application.Common.DTOs;
+using Application.Common.Services.Mediator.Interfaces;
 
 namespace WebApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
     public class AccountController : BaseApiController
     {

@@ -1,7 +1,7 @@
-﻿using Application.Services.Mediator.Interfaces;
+﻿using Application.Common.Services.Mediator.Interfaces;
 using Domain.Shared;
 
-namespace Application.Services.Mediator
+namespace Application.Common.Services.Mediator
 {
     public class Mediator : IMediator
     {

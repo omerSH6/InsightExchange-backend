@@ -1,5 +1,5 @@
-﻿using Application.DTOs;
-using Application.Services.Mediator.Interfaces;
+﻿using Application.Common.DTOs;
+using Application.Common.Services.Mediator.Interfaces;
 using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
 using Domain.Shared;

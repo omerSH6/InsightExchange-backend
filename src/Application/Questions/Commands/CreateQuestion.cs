@@ -1,5 +1,6 @@
-﻿using Application.DTOs;
-using Application.Services.Mediator.Interfaces;
+﻿using System;
+using Application.Common.DTOs;
+using Application.Common.Services.Mediator.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
@@ -42,7 +43,6 @@ namespace Application.Questions.Commands
                     await _tagRepository.CreateTagAsync(tag);
                 }
             }
-
             var questionTags = await _tagRepository.GetByNamesAsync(request.Tags);
 
             var question = new Question() 

@@ -1,8 +1,8 @@
 ﻿using Application.Answers.Commands;
-using Application.DTOs;
+using Application.Common.DTOs;
+using Application.Common.Services.Mediator.Interfaces;
 using Application.Questions.Commands;
 using Application.Questions.Queries;
-using Application.Services.Mediator.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +10,6 @@ namespace WebApi.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
     public class QuestionsController : BaseApiController
     {
         public QuestionsController(IMediator mediator)
@@ -18,7 +17,7 @@ namespace WebApi.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<QuestionDTO>> GetQuestionByIdAsync([FromQuery] GetQuestionQuery query)
+        public async Task<ActionResult<QuestionDTO>> GetQuestion([FromQuery] GetQuestionQuery query)
         {
            
             var result = await _mediator.Send<GetQuestionQuery, QuestionDTO>(query);
@@ -32,8 +31,8 @@ namespace WebApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet("Preview")]
-        public async Task<ActionResult<List<QuestionPreviewDTO>>> GetQuestionsAsync([FromQuery] GetQuestionsQuery query)
+        [HttpGet("pagination")]
+        public async Task<ActionResult<List<QuestionPreviewDTO>>> GetQuestionsWithPagination([FromQuery] GetQuestionsQuery query)
         {
             var result = await _mediator.Send<GetQuestionsQuery, List<QuestionPreviewDTO>>(query);
 
@@ -46,7 +45,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<QuestionDTO>> Question([FromBody] CreateQuestionCommand command)
+        public async Task<ActionResult<QuestionDTO>> CreateQuestion([FromBody] CreateQuestionCommand command)
         {
             var result = await _mediator.Send<CreateQuestionCommand, QuestionDTO>(command);
 
@@ -56,19 +55,6 @@ namespace WebApi.Controllers
             }
 
             return Ok(result.Data);
-        }
-
-        [HttpPost("vote")]
-        public async Task<IActionResult> Vote([FromBody] CreateQuestionVote command)
-        {
-            var result = await _mediator.Send<CreateQuestionVote, bool>(command);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest();
-            }
-
-            return Ok();
         }
     }
 }

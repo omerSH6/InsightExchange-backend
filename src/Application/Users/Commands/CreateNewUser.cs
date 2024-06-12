@@ -1,4 +1,4 @@
-﻿using Application.Services.Mediator.Interfaces;
+﻿using Application.Common.Services.Mediator.Interfaces;
 using Domain.Entities;
 using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;

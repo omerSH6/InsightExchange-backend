@@ -1,13 +1,13 @@
 ﻿using System.Reflection;
-using Application.Services.Mediator.Interfaces;
+using Application.Common.Services.Mediator.Interfaces;
 
-namespace Application.Services.Mediator
+namespace Application.Common.Services.Mediator
 {
     public class MediatorRequestHandlersManager : IMediatorRequestHandlersManager
     {
         public static IMediatorRequestHandlersManager Instance { get; } = new MediatorRequestHandlersManager();
         private readonly Dictionary<Type, Type> _requestHandlers = new Dictionary<Type, Type>();
-        public MediatorRequestHandlersManager() 
+        public MediatorRequestHandlersManager()
         {
             LoadRequestHandlers();
         }

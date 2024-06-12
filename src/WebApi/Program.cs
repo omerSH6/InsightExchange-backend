@@ -1,4 +1,4 @@
-using Application.Services.Mediator;
+using Application.Common.Services.Mediator;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;

@@ -1,7 +1,6 @@
-﻿
-namespace Application.DTOs
+﻿namespace Application.Common.DTOs
 {
-    public class RegisterDTO
+    public class LoginDTO
     {
         public required string UserName { get; set; }
         public required string Email { get; set; }

@@ -1,8 +1,8 @@
-﻿using Application.Services.Mediator.Interfaces;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Domain.Shared;
 using Domain.Interfaces.Authentication;
+using Application.Common.Services.Mediator.Interfaces;
 
 namespace Application.Questions.Commands
 {
