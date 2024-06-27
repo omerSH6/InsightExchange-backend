@@ -37,9 +37,11 @@ namespace Application.Users.Commands
 
             if(_passwordHashService.VerifyPasswordHash(request.Password, user.PasswordHash))
             {
-                var UserLoginTokenDTO = new UserLoginTokenDTO() 
+                var UserLoginTokenDTO = new UserLoginTokenDTO()
                 {
                     LoginToken = _jwtProvider.Generate(user),
+                    UserName = user.UserName,
+                    UserId = user.Id
                 };
 
                 return UserLoginTokenDTO;

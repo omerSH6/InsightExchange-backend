@@ -1,5 +1,6 @@
 ﻿using Application.Common.DTOs;
 using Application.Common.Services.Mediator.Interfaces;
+using Application.Questions.Commands;
 using Domain.Entities;
 using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
@@ -28,7 +29,8 @@ namespace Application.Answers.Commands
             _userService = userService;
         }
 
-        async Task<AnswerDTO> IRequestHandler<CreateAnswerCommand, AnswerDTO>.Handle(CreateAnswerCommand request)
+        public async Task<AnswerDTO> Handle(CreateAnswerCommand request)
+
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);

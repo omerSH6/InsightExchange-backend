@@ -45,7 +45,7 @@ namespace Infrastructure.Repositories
             query = query.Skip((page - 1) * pageSize).Take(pageSize);
 
             // Execute the query and return the result
-            query = query.Include(q => q.User).Include(q => q.Tags);
+            query = query.Include(q => q.User).Include(q => q.Tags).Include(q => q.Answers);
             return await query.ToListAsync();
         }
 
