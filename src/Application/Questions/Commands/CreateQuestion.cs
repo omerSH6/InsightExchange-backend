@@ -75,7 +75,6 @@ namespace Application.Questions.Commands
                 Answers = new List<AnswerDTO>(),
                 Tags = question.Tags.Select(tag => new TagDTO() 
                 {
-                    Id = tag.Id,
                     Name = tag.Name,
                 }).ToList(),
             };

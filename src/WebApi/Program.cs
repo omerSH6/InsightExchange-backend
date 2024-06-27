@@ -29,6 +29,8 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "InsightExchange V1");
     });
 }
+app.UseCors(builder =>
+                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();

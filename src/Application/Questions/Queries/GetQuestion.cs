@@ -60,7 +60,7 @@ namespace Application.Questions.Queries
                     WasVotedByCurrentUser = answare.Votes.Any(vote =>authenticatedUserId.HasValue &&  vote.User.Id == authenticatedUserId),
                     TotalVotes = answare.Votes.Where(vote => vote.isPositiveVote).ToList().Count() - answare.Votes.Where(vote => !vote.isPositiveVote).ToList().Count(),
                 }).ToList(),
-                Tags = question.Tags.Select(tag=> new TagDTO() { Name = tag.Name, Id = tag.Id}).ToList(),
+                Tags = question.Tags.Select(tag=> new TagDTO() { Name = tag.Name}).ToList(),
             };
 
             return questionDTO;

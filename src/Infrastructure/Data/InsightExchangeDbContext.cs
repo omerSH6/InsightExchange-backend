@@ -15,5 +15,14 @@ namespace Infrastructure.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<AnswerVote> AnswerVote { get; set; }
         public DbSet<QuestionVote> QuestionVote { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Tag>()
+                .HasIndex(t => t.Name)
+                .IsUnique();
+        }
     }
 }
