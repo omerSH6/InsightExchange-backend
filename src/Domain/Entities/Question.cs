@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using Domain.Enums;
+
+namespace Domain.Entities
 {
     public class Question
     {
@@ -11,5 +13,6 @@
         public List<QuestionVote> Votes { get; set; } = new List<QuestionVote>();
         public List<Tag> Tags { get; set; } = new List<Tag>();
         public List<Answer> Answers { get; set; } = new List<Answer>();
+        public required QuestionState State { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Application.Common.DTOs;
 using Application.Common.Services.Mediator.Interfaces;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
 using Domain.Shared;
@@ -45,14 +46,15 @@ namespace Application.Questions.Commands
             }
             var questionTags = await _tagRepository.GetByNamesAsync(request.Tags);
 
-            var question = new Question() 
+            var question = new Question()
             {
                 Title = request.Title,
                 Content = request.Content,
                 CreatedAt = DateTime.UtcNow,
                 UserId = user.Id,
                 User = user,
-                Tags = questionTags
+                Tags = questionTags,
+                State = QuestionState.Pending,
             };
 
             await _questionRepository.CreateQuestionAsync(question);
