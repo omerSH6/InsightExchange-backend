@@ -41,6 +41,7 @@ namespace Application.Users.Commands
                 {
                     LoginToken = _jwtProvider.Generate(user),
                     UserName = user.UserName,
+                    Role = user.Role.ToString(),
                     UserId = user.Id
                 };
 
