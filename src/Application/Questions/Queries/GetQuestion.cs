@@ -1,5 +1,6 @@
 ﻿using Application.Common.DTOs;
 using Application.Common.Services.Mediator.Interfaces;
+using Domain.Enums;
 using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
 
@@ -8,16 +9,19 @@ namespace Application.Questions.Queries
     public class GetQuestionQuery : IRequest<QuestionDTO>
     {
         public int Id { get; set; }
+        public QuestionState QuestionState { get; set; }
     }
 
     public class GetQuestionHandler : IRequestHandler<GetQuestionQuery, QuestionDTO>
     {
         private readonly IQuestionRepository _questionRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
 
-        public GetQuestionHandler(IQuestionRepository questionRepository, IUserService userService)
+        public GetQuestionHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
+            _userRepository = userRepository;
             _userService = userService;
         }
 
@@ -25,11 +29,25 @@ namespace Application.Questions.Queries
         {
             var requestedQuestingId = request.Id;
             var authenticatedUserId = _userService.GetAuthenticatedUserIfExist();
-            var question = await _questionRepository.GetByIdAsync(requestedQuestingId);
+            var question = await _questionRepository.GetByIdAsync(requestedQuestingId, request.QuestionState);
 
             if (question == null)
             {
                 throw new Exception($"The question with the id of {requestedQuestingId} not exist");
+            }
+
+            if (request.QuestionState == QuestionState.Pending)
+            {
+                if (!authenticatedUserId.HasValue)
+                {
+                    throw new Exception($"User is not authenticated");
+                }
+
+                var user = await _userRepository.GetUserById(authenticatedUserId.Value);
+                if (user.Role != UserRole.Admin)
+                {
+                    throw new Exception($"User NOT authorized");
+                }
             }
 
             var questionDTO = new QuestionDTO()

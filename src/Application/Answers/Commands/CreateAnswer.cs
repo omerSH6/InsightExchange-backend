@@ -2,6 +2,7 @@
 using Application.Common.Services.Mediator.Interfaces;
 using Application.Questions.Commands;
 using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
 using Domain.Shared;
@@ -34,7 +35,7 @@ namespace Application.Answers.Commands
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
-            var question = await _questionRepository.GetByIdAsync(request.QuestionId);
+            var question = await _questionRepository.GetByIdAsync(request.QuestionId, QuestionState.Approved);
 
             if (question == null)
             {

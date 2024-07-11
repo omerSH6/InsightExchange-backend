@@ -4,7 +4,6 @@ using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
-using Domain.Shared;
 
 namespace Application.Questions.Queries
 {
@@ -13,6 +12,7 @@ namespace Application.Questions.Queries
         public string? Tag { get; set; }
         public required SortBy SortBy { get; set; }
         public required SortDirection SortDirection { get; set; }
+        public required QuestionState QuestionState { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }
     }
@@ -20,18 +20,33 @@ namespace Application.Questions.Queries
     public class GetQuestionsHandler : IRequestHandler<GetQuestionsQuery, List<QuestionPreviewDTO>>
     {
         private readonly IQuestionRepository _questionRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
 
-        public GetQuestionsHandler(IQuestionRepository questionRepository, IUserService userService)
+        public GetQuestionsHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
+            _userRepository = userRepository;
             _userService = userService;
         }
 
         public async Task<List<QuestionPreviewDTO>> Handle(GetQuestionsQuery request)
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserIfExist();
-            var questions = await _questionRepository.GetTaggedSortedQuestionsWithPaginationAsync(request.Tag, request.SortBy, request.SortDirection, request.Page, request.PageSize);
+            if (request.QuestionState == QuestionState.Pending)
+            {
+                if (!authenticatedUserId.HasValue)
+                {
+                    throw new Exception($"User is not authenticated");
+                }
+
+                var user = await _userRepository.GetUserById(authenticatedUserId.Value);
+                if (user.Role != UserRole.Admin)
+                {
+                    throw new Exception($"User NOT authorized");
+                }
+            }
+            var questions = await _questionRepository.GetTaggedSortedQuestionsWithPaginationAsync(request.Tag, request.SortBy, request.SortDirection, request.Page, request.PageSize, request.QuestionState);
             var questionsPreview = questions.Select(question => QuestionToQuestionPreviewDTO(question, authenticatedUserId)).ToList();
 
             return questionsPreview;
