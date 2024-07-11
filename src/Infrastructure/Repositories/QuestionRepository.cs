@@ -56,5 +56,19 @@ namespace Infrastructure.Repositories
             _context.Questions.Add(answer);
             await _context.SaveChangesAsync();
         }
+
+        public async Task EditQuestionState(int questionId, QuestionState questionState)
+        {
+            var question = await _context.Questions.SingleAsync(q => q.Id == questionId);
+            question.State = questionState;
+            await _context.SaveChangesAsync();
+        }
+        
+        public async Task DeleteQuestion(int questionId)
+        {
+            var question = await _context.Questions.SingleAsync(q => q.Id == questionId);
+            _context.Questions.Remove(question);
+            await _context.SaveChangesAsync();
+        }
     }
 }

@@ -6,5 +6,6 @@ namespace Domain.Interfaces.Repositories
     {
         Task<Answer> GetAnswerByIdAsync(int id);
         Task CreateAnswerAsync(Answer answer);
+        Task DeleteAnswer(int answerId);
     }
 }

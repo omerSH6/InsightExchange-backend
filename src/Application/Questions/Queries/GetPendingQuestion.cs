@@ -6,33 +6,34 @@ using Domain.Interfaces.Repositories;
 
 namespace Application.Questions.Queries
 {
-    public class GetQuestionQuery : IRequest<QuestionDTO>
+    public class GetPendingQuestionQuery : IRequest<QuestionDTO>
     {
         public int Id { get; set; }
     }
 
-    public class GetQuestionHandler : IRequestHandler<GetQuestionQuery, QuestionDTO>
+    public class GetPendingQuestionHandler : IRequestHandler<GetPendingQuestionQuery, QuestionDTO>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
 
-        public GetQuestionHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
+        public GetPendingQuestionHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;
             _userService = userService;
         }
 
-        public async Task<QuestionDTO> Handle(GetQuestionQuery request)
+        public async Task<QuestionDTO> Handle(GetPendingQuestionQuery request)
         {
             var requestedQuestingId = request.Id;
-            var authenticatedUserId = _userService.GetAuthenticatedUserIfExist();
-            var question = await _questionRepository.GetByIdAsync(requestedQuestingId, QuestionState.Approved);
+            var authenticatedUserId = _userService.GetAuthenticatedUserId();
+            var question = await _questionRepository.GetByIdAsync(requestedQuestingId, QuestionState.Pending);
 
-            if (question == null)
+            var user = await _userRepository.GetUserById(authenticatedUserId);
+            if (user.Role != UserRole.Admin)
             {
-                throw new Exception($"The question with the id of {requestedQuestingId} not exist");
+                throw new Exception($"User NOT authorized");
             }
 
             var questionDTO = new QuestionDTO()
@@ -46,8 +47,8 @@ namespace Application.Questions.Queries
                     Id = question.User.Id,
                     UserName = question.User.UserName
                 },
-                WasAskedByCurrentUser = authenticatedUserId.HasValue && question.UserId == authenticatedUserId,
-                WasVotedByCurrentUser = question.Votes.Any(vote => authenticatedUserId.HasValue && vote.UserId == authenticatedUserId),
+                WasAskedByCurrentUser = question.UserId == authenticatedUserId,
+                WasVotedByCurrentUser = question.Votes.Any(vote => vote.UserId == authenticatedUserId),
                 TotalVotes = question.Votes.Where(vote => vote.isPositiveVote).ToList().Count() - question.Votes.Where(vote => !vote.isPositiveVote).ToList().Count(),
                 Answers = question.Answers.Select(answare => new AnswerDTO()
                 {
@@ -59,8 +60,8 @@ namespace Application.Questions.Queries
                         Id = answare.User.Id,
                         UserName = answare.User.UserName
                     },
-                    WasReipaiedByCurrentUser = authenticatedUserId.HasValue && answare.UserId == authenticatedUserId,
-                    WasVotedByCurrentUser = answare.Votes.Any(vote =>authenticatedUserId.HasValue &&  vote.UserId == authenticatedUserId),
+                    WasReipaiedByCurrentUser = answare.UserId == authenticatedUserId,
+                    WasVotedByCurrentUser = answare.Votes.Any(vote =>vote.UserId == authenticatedUserId),
                     TotalVotes = answare.Votes.Where(vote => vote.isPositiveVote).ToList().Count() - answare.Votes.Where(vote => !vote.isPositiveVote).ToList().Count(),
                 }).ToList(),
                 Tags = question.Tags.Select(tag=> new TagDTO() { Name = tag.Name}).ToList(),
