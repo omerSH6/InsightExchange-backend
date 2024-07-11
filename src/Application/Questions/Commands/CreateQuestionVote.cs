@@ -38,6 +38,11 @@ namespace Application.Questions.Commands
                 throw new Exception($"Question with id: {request.QuestionId} does not exist");
             }
 
+            if (question.Votes.Any(v=>v.UserId == user.Id))
+            {
+                throw new Exception($"User already voted for this question");
+            }
+
             var questionVote = new QuestionVote() 
             {
                 CreatedAt = DateTime.UtcNow,

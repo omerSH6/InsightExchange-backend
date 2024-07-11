@@ -2,6 +2,7 @@ using Application.Common.Services.Mediator;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using WebApi.Middleware;
 using WebApi.OptionsSetup;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +30,8 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "InsightExchange V1");
     });
 }
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseCors(builder =>
                 builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseHttpsRedirection();

@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
@@ -21,7 +22,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Answer> GetAnswerByIdAsync(int id)
         {
-            return await _context.Answers.FindAsync(id);
+            return await _context.Answers.Include(a => a.Votes).Include(a => a.User).FirstOrDefaultAsync(d => d.Id == id);
         }
     }
 }

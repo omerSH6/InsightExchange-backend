@@ -38,6 +38,11 @@ namespace Application.Answers.Commands
                 throw new Exception($"Answer with id: {request.AnswerId} does not exist");
             }
 
+            if (answer.Votes.Any(v => v.UserId == user.Id))
+            {
+                throw new Exception($"User already voted for this question");
+            }
+
             var answerVote = new AnswerVote()
             {
                 CreatedAt = DateTime.UtcNow,

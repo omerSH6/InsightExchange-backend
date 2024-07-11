@@ -43,8 +43,8 @@ namespace Application.Questions.Queries
                     Id = question.User.Id,
                     UserName = question.User.UserName
                 },
-                WasAskedByCurrentUser = authenticatedUserId.HasValue && question.User.Id == authenticatedUserId,
-                WasVotedByCurrentUser = question.Votes.Any(vote => authenticatedUserId.HasValue && vote.User.Id == authenticatedUserId),
+                WasAskedByCurrentUser = authenticatedUserId.HasValue && question.UserId == authenticatedUserId,
+                WasVotedByCurrentUser = question.Votes.Any(vote => authenticatedUserId.HasValue && vote.UserId == authenticatedUserId),
                 TotalVotes = question.Votes.Where(vote => vote.isPositiveVote).ToList().Count() - question.Votes.Where(vote => !vote.isPositiveVote).ToList().Count(),
                 Answers = question.Answers.Select(answare => new AnswerDTO()
                 {
@@ -56,8 +56,8 @@ namespace Application.Questions.Queries
                         Id = answare.User.Id,
                         UserName = answare.User.UserName
                     },
-                    WasReipaiedByCurrentUser = authenticatedUserId.HasValue && answare.Id == authenticatedUserId,
-                    WasVotedByCurrentUser = answare.Votes.Any(vote =>authenticatedUserId.HasValue &&  vote.User.Id == authenticatedUserId),
+                    WasReipaiedByCurrentUser = authenticatedUserId.HasValue && answare.UserId == authenticatedUserId,
+                    WasVotedByCurrentUser = answare.Votes.Any(vote =>authenticatedUserId.HasValue &&  vote.UserId == authenticatedUserId),
                     TotalVotes = answare.Votes.Where(vote => vote.isPositiveVote).ToList().Count() - answare.Votes.Where(vote => !vote.isPositiveVote).ToList().Count(),
                 }).ToList(),
                 Tags = question.Tags.Select(tag=> new TagDTO() { Name = tag.Name}).ToList(),
