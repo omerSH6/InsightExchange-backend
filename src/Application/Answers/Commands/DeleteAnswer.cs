@@ -1,6 +1,6 @@
-﻿using Application.Common.Services.Mediator.Interfaces;
+﻿using Application.Common.Interfaces;
+using Application.Common.Services.Mediator.Interfaces;
 using Domain.Enums;
-using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
 
 namespace Application.Answers.Commands

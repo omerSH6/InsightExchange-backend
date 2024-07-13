@@ -1,11 +1,9 @@
 ﻿using Application.Common.DTOs;
+using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
-using Application.Questions.Commands;
 using Domain.Entities;
 using Domain.Enums;
-using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
-using Domain.Shared;
 
 namespace Application.Answers.Commands
 {

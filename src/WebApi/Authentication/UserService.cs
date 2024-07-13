@@ -1,8 +1,7 @@
 ﻿using System.Security.Claims;
-using Domain.Interfaces.Authentication;
-using Microsoft.AspNetCore.Http;
+using Application.Common.Interfaces;
 
-namespace Infrastructure.Authentication
+namespace WebApi.Authentication
 {
     public class UserService : IUserService
     {

@@ -1,8 +1,8 @@
 ﻿using Domain.Entities;
 
-namespace Domain.Interfaces.Authentication
+namespace Application.Common.Interfaces
 {
-    public interface IJwtProvider
+    public interface ITokenProvider
     {
         string Generate(User member);
     }

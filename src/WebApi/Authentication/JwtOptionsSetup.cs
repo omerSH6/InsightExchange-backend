@@ -1,7 +1,7 @@
 ﻿using Domain.Shared;
 using Microsoft.Extensions.Options;
 
-namespace WebApi.OptionsSetup
+namespace WebApi.Authentication
 {
     public class JwtOptionsSetup : IConfigureOptions<JwtOptions>
     {

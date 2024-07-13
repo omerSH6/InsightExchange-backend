@@ -1,6 +1,4 @@
-﻿using Domain.Interfaces.Authentication;
-using Domain.Interfaces.Repositories;
-using Infrastructure.Authentication;
+﻿using Domain.Interfaces.Repositories;
 using Infrastructure.Data;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -24,11 +22,7 @@ namespace Infrastructure
             services.AddScoped<IQuestionVoteRepository, QuestionVoteRepository>();
             services.AddScoped<ITagRepository, TagRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
-
-            services.AddSingleton<IJwtProvider, JwtProvider>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IPasswordHashService, PasswordHashService>();
-            services.AddScoped<IUserService, UserService>();
 
             return services;
         }

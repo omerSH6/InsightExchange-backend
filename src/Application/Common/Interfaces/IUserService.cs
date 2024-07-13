@@ -1,4 +1,4 @@
-﻿namespace Domain.Interfaces.Authentication
+﻿namespace Application.Common.Interfaces
 {
     public interface IUserService
     {

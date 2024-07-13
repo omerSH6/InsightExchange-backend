@@ -1,9 +1,11 @@
+using Application;
+using Application.Common.Interfaces;
 using Application.Common.Services.Mediator;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using WebApi.Authentication;
 using WebApi.Middleware;
-using WebApi.OptionsSetup;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,9 +15,12 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "InsightExchange", Version = "v1" });
 });
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddSingleton<ITokenProvider, JwtProvider>();
 builder.Services.ConfigureOptions<JwtOptionsSetup>();
 builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddMediator();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer();

@@ -1,9 +1,8 @@
 ﻿using Application.Common.Services.Mediator.Interfaces;
+using Application.Common.Services.PasswordHash.Interfaces;
 using Domain.Entities;
 using Domain.Enums;
-using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
-using Domain.Shared;
 
 namespace Application.Users.Commands
 {

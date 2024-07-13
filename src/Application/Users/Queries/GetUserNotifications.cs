@@ -1,6 +1,6 @@
 ﻿using Application.Common.DTOs;
+using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
-using Domain.Interfaces.Authentication;
 using Domain.Interfaces.Repositories;
 
 namespace Application.Users.Queries

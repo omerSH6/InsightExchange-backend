@@ -1,15 +1,15 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Interfaces.Authentication;
 using Domain.Shared;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Infrastructure.Authentication
+namespace WebApi.Authentication
 {
-    internal sealed class JwtProvider : IJwtProvider
+    internal sealed class JwtProvider : ITokenProvider
     {
         private readonly JwtOptions _options;
 
