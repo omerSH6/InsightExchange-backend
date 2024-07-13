@@ -21,7 +21,7 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpGet("pagination")]
+        [HttpGet("getPendingQuestionsWithPagination")]
         public async Task<ActionResult<List<QuestionPreviewDTO>>> GetPendingQuestionsWithPagination([FromQuery] GetPendingQuestionsQuery query)
         {
             var result = await _mediator.Send(query);

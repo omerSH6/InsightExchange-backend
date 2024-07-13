@@ -20,6 +20,12 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task AddUserNotification(int userId, Notification notification)
+        {
+            _context.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<User> GetUserByEmailAsync(string email)
         {
             return await _context.Users.Where(user => user.Email.Equals(email)).FirstOrDefaultAsync();
@@ -38,6 +44,11 @@ namespace Infrastructure.Repositories
         public async Task<User> GetUserByUserNameAsync(string userName)
         {
             return await _context.Users.Where(user => user.UserName.Equals(userName)).FirstOrDefaultAsync();
+        }
+        
+        public async Task<List<Notification>> GetUserNotifications(int userId)
+        {
+            return await _context.Notifications.Where(n=>n.UserId == userId).ToListAsync();
         }
     }
 }

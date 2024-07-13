@@ -70,5 +70,10 @@ namespace Infrastructure.Repositories
             _context.Questions.Remove(question);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Question> GetByIdAsync(int id)
+        {
+            return await _context.Questions.Include(d => d.Tags).Include(d => d.Answers).ThenInclude(a => a.User).Include(q => q.Answers).ThenInclude(a => a.Votes).Include(q => q.Votes).Include(d => d.User).FirstOrDefaultAsync(d => d.Id == id);
+        }
     }
 }

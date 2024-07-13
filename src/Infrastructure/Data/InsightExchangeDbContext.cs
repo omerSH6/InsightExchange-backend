@@ -15,6 +15,7 @@ namespace Infrastructure.Data
         public DbSet<Tag> Tags { get; set; }
         public DbSet<AnswerVote> AnswerVote { get; set; }
         public DbSet<QuestionVote> QuestionVote { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
