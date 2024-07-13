@@ -14,7 +14,7 @@ namespace WebApi.Controllers
         public AdministratorController(IMediator mediator)
             : base(mediator) { }
 
-        [HttpGet]
+        [HttpGet("getPendingQuestion")]
         public async Task<ActionResult<QuestionDTO>> GetPendingQuestion([FromQuery] GetPendingQuestionQuery query)
         {
             var result = await _mediator.Send(query);
@@ -29,21 +29,21 @@ namespace WebApi.Controllers
         }
         
         [HttpPut("editQuestionState")]
-        public async Task<ActionResult> EditQuestionState([FromQuery] EditQuestionStateCommand command)
+        public async Task<ActionResult> EditQuestionState([FromBody] EditQuestionStateCommand command)
         {
             await _mediator.Send(command);
             return Ok();
         }
 
         [HttpGet("deleteQuestion")]
-        public async Task<ActionResult<List<QuestionPreviewDTO>>> DeleteQuestion([FromQuery] DeleteQuestionCommand command)
+        public async Task<ActionResult<List<QuestionPreviewDTO>>> DeleteQuestion([FromBody] DeleteQuestionCommand command)
         {
             await _mediator.Send(command);
             return Ok();
         }
         
         [HttpGet("deleteAnswer")]
-        public async Task<ActionResult<List<QuestionPreviewDTO>>> DeleteAnswer([FromQuery] DeleteAnswerCommand command)
+        public async Task<ActionResult<List<QuestionPreviewDTO>>> DeleteAnswer([FromBody] DeleteAnswerCommand command)
         {
             await _mediator.Send(command);
             return Ok();

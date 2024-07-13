@@ -29,6 +29,7 @@ namespace Application.Questions.Commands
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var question = await _questionRepository.GetByIdAsync(request.QuestionId);
+            var originalQuestionState = question.State;
             var user = await _userRepository.GetUserById(authenticatedUserId);
             if (user.Role != UserRole.Admin)
             {
@@ -37,7 +38,7 @@ namespace Application.Questions.Commands
 
             await _questionRepository.EditQuestionState(request.QuestionId, request.QuestionState);
 
-            if (question.State != request.QuestionState)
+            if (question.State != originalQuestionState)
             {
                 string questionState = "";
                 switch (request.QuestionState)
