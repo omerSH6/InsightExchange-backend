@@ -58,9 +58,9 @@ namespace Application.Questions.Commands
                 { 
                     Content = notificationMessage,
                     CreatedAt = DateTime.Now,
-                    UserId = authenticatedUserId
+                    UserId = question.UserId
                 };
-                await _userRepository.AddUserNotification(authenticatedUserId, notification);
+                await _userRepository.AddUserNotification(question.UserId, notification);
             }
         }
     }

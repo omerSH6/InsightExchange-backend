@@ -27,13 +27,7 @@ namespace Application.Users.Commands
 
         public async Task Handle(CreateNewUserCommand request)
         {
-            var user = await _userRepository.GetUserByEmailAsync(request.Email);
-            if (user != null)
-            {
-                throw new Exception("user with this email already exist");
-            }
-            
-            user = await _userRepository.GetUserByUserNameAsync(request.UserName);
+            var user = await _userRepository.GetUserByUserNameAsync(request.UserName);
             if (user != null)
             {
                 throw new Exception("user with this user name already exist");
