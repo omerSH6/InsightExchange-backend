@@ -1,4 +1,4 @@
-﻿namespace Domain.Shared
+﻿namespace WebApi.Authentication
 {
     public class JwtOptions
     {

@@ -1,6 +1,4 @@
-﻿using Domain.Shared;
-
-namespace Application.Common.Services.Mediator.Interfaces
+﻿namespace Application.Common.Services.Mediator.Interfaces
 {
     public interface IMediator
     {

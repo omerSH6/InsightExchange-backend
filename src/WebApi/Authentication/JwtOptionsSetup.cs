@@ -1,5 +1,4 @@
-﻿using Domain.Shared;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 
 namespace WebApi.Authentication
 {
