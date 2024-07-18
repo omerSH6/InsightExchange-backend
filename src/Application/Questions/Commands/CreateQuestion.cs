@@ -70,28 +70,7 @@ namespace Application.Questions.Commands
 
             await _questionRepository.CreateQuestionAsync(question);
 
-            var questionDto = new QuestionDTO() 
-            {
-                Id = question.Id,
-                Title = question.Title,
-                Content = question.Content,
-                CreatedAt = question.CreatedAt,
-                User = new UserDTO()
-                {
-                    Id=user.Id,
-                    UserName = user.UserName,
-
-                },
-                WasAskedByCurrentUser = true,
-                WasVotedByCurrentUser = false,
-                TotalVotes = 0,
-                Answers = new List<AnswerDTO>(),
-                Tags = question.Tags.Select(tag => new TagDTO() 
-                {
-                    Name = tag.Name,
-                }).ToList(),
-            };
-            return questionDto;
+            return Mapping.QuestionToQuestionDTO(question, authenticatedUserId);
         }
     }
 }

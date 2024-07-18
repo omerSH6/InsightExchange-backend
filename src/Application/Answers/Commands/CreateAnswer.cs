@@ -38,7 +38,6 @@ namespace Application.Answers.Commands
         }
 
         public async Task<AnswerDTO> Handle(CreateAnswerCommand request)
-
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
@@ -61,23 +60,8 @@ namespace Application.Answers.Commands
 
             await _answerRepository.CreateAnswerAsync(answer);
 
-            var answerDto = new AnswerDTO() 
-            {
-                Id = answer.Id,
-                Content = answer.Content,
-                CreatedAt = answer.CreatedAt,
-                User = new UserDTO()
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                },
-                WasReipaiedByCurrentUser = true,
-                WasVotedByCurrentUser = false,
-                TotalVotes = 0
-
-            };
-
-            return answerDto;
+          
+            return Mapping.AnswerToAnswerDTO(answer, authenticatedUserId);
         }
     }
 }

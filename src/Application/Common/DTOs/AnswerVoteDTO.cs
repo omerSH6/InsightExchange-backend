@@ -2,6 +2,6 @@
 {
     public class AnswerVoteDTO : VoteDTO
     {
-        public int AnswerId { get; set; }
+        public required int AnswerId { get; set; }
     }
 }

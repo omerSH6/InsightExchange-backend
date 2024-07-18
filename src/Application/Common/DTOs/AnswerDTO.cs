@@ -2,12 +2,12 @@
 {
     public class AnswerDTO
     {
-        public int Id { get; set; }
+        public required int Id { get; set; }
         public required string Content { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public required DateTime CreatedAt { get; set; }
         public required UserDTO User { get; set; }
-        public bool WasReipaiedByCurrentUser { get; set; }
-        public bool WasVotedByCurrentUser { get; set; }
-        public int TotalVotes { get; set; }
+        public required bool WasReipaiedByCurrentUser { get; set; }
+        public required bool WasVotedByCurrentUser { get; set; }
+        public required int TotalVotes { get; set; }
     }
 }

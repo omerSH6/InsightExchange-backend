@@ -1,7 +1,7 @@
 ﻿using Application.Common.DTOs;
 using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
-using Domain.Entities;
+using Application.Common.Utils;
 using Domain.Enums;
 using Domain.Interfaces.Repositories;
 
@@ -14,6 +14,14 @@ namespace Application.Questions.Queries
         public required SortDirection SortDirection { get; set; }
         public int Page { get; set; }
         public int PageSize { get; set; }
+    }
+
+    public class GetPendingQuestionsQueryValidator : IRequestValidator<GetPendingQuestionsQuery>
+    {
+        public bool IsValid(GetPendingQuestionsQuery request)
+        {
+            return Validators.IsIdValid(request.Page) && Validators.IsIdValid(request.PageSize);
+        }
     }
 
     public class GetPendingQuestionsHandler : IRequestHandler<GetPendingQuestionsQuery, List<QuestionPreviewDTO>>
@@ -40,37 +48,9 @@ namespace Application.Questions.Queries
             }
 
             var questions = await _questionRepository.GetTaggedSortedQuestionsWithPaginationAsync(request.Tag, request.SortBy, request.SortDirection, request.Page, request.PageSize, QuestionState.Pending);
-            var questionsPreview = questions.Select(question => QuestionToQuestionPreviewDTO(question, authenticatedUserId)).ToList();
+            var questionsPreview = questions.Select(question => Mapping.QuestionToQuestionPreviewDTO(question, authenticatedUserId)).ToList();
 
             return questionsPreview;
-        }
-
-        private static QuestionPreviewDTO QuestionToQuestionPreviewDTO(Question question, int? AuthenticatedUserId)
-        {
-            var userDto = new UserDTO() 
-            {
-                Id = question.User.Id,
-                UserName = question.User.UserName,
-            };
-
-            var questionPreviewDTO = new QuestionPreviewDTO()
-            {
-                Id = question.Id,
-                Title = question.Title,
-                PreviewContent = question.Content.Length > 20 ? question.Content.Take(20).ToString() : question.Content,
-                CreatedAt = question.CreatedAt,
-                User = userDto,
-                WasAskedByCurrentUser = question.UserId == AuthenticatedUserId,
-                WasVotedByCurrentUser = question.Votes.Any(vote => vote.User.Id == AuthenticatedUserId),
-                TotalVotes = question.Votes.Where(vote => vote.isPositiveVote).ToList().Count() - question.Votes.Where(vote => !vote.isPositiveVote).ToList().Count(),
-                TotalAnswers = question.Answers.Count(),
-                Tags = question.Tags.Select(tag => new TagDTO()
-                {
-                    Name = tag.Name
-                }).ToList()
-            };
-
-            return questionPreviewDTO;
         }
     }
 }

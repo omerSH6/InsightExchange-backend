@@ -2,9 +2,9 @@
 {
     public class VoteDTO
     {
-        public int Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public bool isPositiveVote { get; set; }
-        public int UserId { get; set; }
+        public required int Id { get; set; }
+        public required DateTime CreatedAt { get; set; }
+        public required bool isPositiveVote { get; set; }
+        public required int UserId { get; set; }
     }
 }

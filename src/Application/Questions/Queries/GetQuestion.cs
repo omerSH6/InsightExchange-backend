@@ -1,6 +1,7 @@
 ﻿using Application.Common.DTOs;
 using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
+using Application.Common.Utils;
 using Domain.Enums;
 using Domain.Interfaces.Repositories;
 
@@ -9,6 +10,14 @@ namespace Application.Questions.Queries
     public class GetQuestionQuery : IRequest<QuestionDTO>
     {
         public int Id { get; set; }
+    }
+
+    public class GetQuestionQueryValidator : IRequestValidator<GetQuestionQuery>
+    {
+        public bool IsValid(GetQuestionQuery request)
+        {
+            return Validators.IsIdValid(request.Id);
+        }
     }
 
     public class GetQuestionHandler : IRequestHandler<GetQuestionQuery, QuestionDTO>
@@ -35,38 +44,7 @@ namespace Application.Questions.Queries
                 throw new Exception($"The question with the id of {requestedQuestingId} not exist");
             }
 
-            var questionDTO = new QuestionDTO()
-            {
-                Title = question.Title,
-                Id = question.Id,
-                Content = question.Content,
-                CreatedAt = question.CreatedAt,
-                User = new UserDTO()
-                {
-                    Id = question.User.Id,
-                    UserName = question.User.UserName
-                },
-                WasAskedByCurrentUser = authenticatedUserId.HasValue && question.UserId == authenticatedUserId,
-                WasVotedByCurrentUser = question.Votes.Any(vote => authenticatedUserId.HasValue && vote.UserId == authenticatedUserId),
-                TotalVotes = question.Votes.Where(vote => vote.isPositiveVote).ToList().Count() - question.Votes.Where(vote => !vote.isPositiveVote).ToList().Count(),
-                Answers = question.Answers.Select(answare => new AnswerDTO()
-                {
-                    Id = answare.Id,
-                    Content = answare.Content,
-                    CreatedAt = answare.CreatedAt,
-                    User = new UserDTO()
-                    {
-                        Id = answare.User.Id,
-                        UserName = answare.User.UserName
-                    },
-                    WasReipaiedByCurrentUser = authenticatedUserId.HasValue && answare.UserId == authenticatedUserId,
-                    WasVotedByCurrentUser = answare.Votes.Any(vote =>authenticatedUserId.HasValue &&  vote.UserId == authenticatedUserId),
-                    TotalVotes = answare.Votes.Where(vote => vote.isPositiveVote).ToList().Count() - answare.Votes.Where(vote => !vote.isPositiveVote).ToList().Count(),
-                }).ToList(),
-                Tags = question.Tags.Select(tag=> new TagDTO() { Name = tag.Name}).ToList(),
-            };
-
-            return questionDTO;
+            return Mapping.QuestionToQuestionDTO(question, authenticatedUserId);
         }
     }
 }
