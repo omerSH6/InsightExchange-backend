@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
+using Application.Common.Utils;
 using Domain.Entities;
 using Domain.Interfaces.Repositories;
 
@@ -9,6 +10,14 @@ namespace Application.Answers.Commands
     {
         public int AnswerId { get; set; }
         public bool IsPositiveVote { get; set; }
+    }
+
+    public class CreateAnswerVoteValidator : IRequestValidator<CreateAnswerVote>
+    {
+        public bool IsValid(CreateAnswerVote request)
+        {
+            return Validators.IsIdValid(request.AnswerId);
+        }
     }
 
     public class CreateAnswerVoteHandler : IRequestHandler<CreateAnswerVote>

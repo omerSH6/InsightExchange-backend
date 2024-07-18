@@ -1,4 +1,5 @@
-﻿using Application.Common.Services.Mediator.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Services.Mediator.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.Common.Services.Mediator
@@ -17,6 +18,18 @@ namespace Application.Common.Services.Mediator
         public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request)
         {
             var handlerInterfaceType = _mediatorRequestHandlersManager.GetRequestHandlerInterfaceType(request.GetType());
+            var requestValidatorInterfaceType = _mediatorRequestHandlersManager.GetRequestValidatorInterfaceType(request.GetType());
+
+            if (requestValidatorInterfaceType != null)
+            {
+                dynamic validator = _serviceProvider.GetRequiredService(requestValidatorInterfaceType);
+                dynamic validationResult = validator.IsValid((dynamic)request);
+                if (!validationResult)
+                {
+                    throw new InvalidInputException();
+                }
+            }
+
             dynamic handler = _serviceProvider.GetRequiredService(handlerInterfaceType);
             return await handler.Handle((dynamic)request);
         }

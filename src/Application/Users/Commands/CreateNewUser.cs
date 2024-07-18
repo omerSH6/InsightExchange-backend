@@ -1,5 +1,7 @@
 ﻿using Application.Common.Services.Mediator.Interfaces;
 using Application.Common.Services.PasswordHash.Interfaces;
+using Application.Common.Utils;
+using Application.Questions.Commands;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces.Repositories;
@@ -11,6 +13,16 @@ namespace Application.Users.Commands
         public required string UserName { get; set; }
         public required string Email { get; set; }
         public required string Password { get; set; }
+    }
+
+    public class CreateNewUserCommandValidator : IRequestValidator<CreateNewUserCommand>
+    {
+        public bool IsValid(CreateNewUserCommand request)
+        {
+            return Validators.IsShortStringValid(request.UserName) &&
+                     Validators.IsShortStringValid(request.Email) &&
+                     Validators.IsShortStringValid(request.Password);
+        }
     }
 
     public class CreateUserHandler : IRequestHandler<CreateNewUserCommand>

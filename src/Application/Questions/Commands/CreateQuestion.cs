@@ -1,6 +1,9 @@
-﻿using Application.Common.DTOs;
+﻿using System.Diagnostics;
+using Application.Answers.Commands;
+using Application.Common.DTOs;
 using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
+using Application.Common.Utils;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces.Repositories;
@@ -12,6 +15,16 @@ namespace Application.Questions.Commands
         public required string Title { get; set; }
         public required string Content { get; set; }
         public List<string> Tags { get; set; } = new List<string>();
+    }
+
+    public class CreateQuestionCommandValidator : IRequestValidator<CreateQuestionCommand>
+    {
+        public bool IsValid(CreateQuestionCommand request)
+        {
+            return Validators.IsShortStringValid(request.Title) && 
+                    Validators.IsLongStringValid(request.Content) &&
+                    Validators.IsTagsListToCreateValid(request.Tags);
+        }
     }
 
     public class CreateQuestionHandler : IRequestHandler<CreateQuestionCommand, QuestionDTO>

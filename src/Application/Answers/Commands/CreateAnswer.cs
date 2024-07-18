@@ -1,6 +1,7 @@
 ﻿using Application.Common.DTOs;
 using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
+using Application.Common.Utils;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces.Repositories;
@@ -11,6 +12,14 @@ namespace Application.Answers.Commands
     {        
         public required string Content { get; set; }
         public int QuestionId { get; set; }
+    }
+
+    public class CreateAnswerCommandValidator : IRequestValidator<CreateAnswerCommand>
+    {
+        public bool IsValid(CreateAnswerCommand request)
+        {
+            return Validators.IsLongStringValid(request.Content) && Validators.IsIdValid(request.QuestionId);
+        }
     }
 
     public class CreateAnswerHandler : IRequestHandler<CreateAnswerCommand, AnswerDTO>

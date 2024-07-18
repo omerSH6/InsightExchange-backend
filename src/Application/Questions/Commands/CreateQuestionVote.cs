@@ -3,6 +3,7 @@ using Domain.Interfaces.Repositories;
 using Application.Common.Services.Mediator.Interfaces;
 using Domain.Enums;
 using Application.Common.Interfaces;
+using Application.Common.Utils;
 
 namespace Application.Questions.Commands
 {
@@ -10,6 +11,15 @@ namespace Application.Questions.Commands
     {
         public int QuestionId { get; set; }
         public bool IsPositiveVote { get; set; }
+    }
+
+
+    public class CreateQuestionVoteValidator : IRequestValidator<CreateQuestionVote>
+    {
+        public bool IsValid(CreateQuestionVote request)
+        {
+            return Validators.IsIdValid(request.QuestionId);
+        }
     }
 
     public class CreateQuestionVoteHandler : IRequestHandler<CreateQuestionVote>

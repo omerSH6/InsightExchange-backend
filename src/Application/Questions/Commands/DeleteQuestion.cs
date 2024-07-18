@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
+using Application.Common.Utils;
 using Domain.Enums;
 using Domain.Interfaces.Repositories;
 
@@ -8,6 +9,14 @@ namespace Application.Questions.Commands
     public class DeleteQuestionCommand : IRequest
     {
         public int QuestionId { get; set; }
+    }
+
+    public class DeleteQuestionCommandValidator : IRequestValidator<DeleteQuestionCommand>
+    {
+        public bool IsValid(DeleteQuestionCommand request)
+        {
+            return Validators.IsIdValid(request.QuestionId);
+        }
     }
 
     public class DeleteQuestionHandler : IRequestHandler<DeleteQuestionCommand>

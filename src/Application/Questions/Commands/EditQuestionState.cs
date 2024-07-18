@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
+using Application.Common.Utils;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Interfaces.Repositories;
@@ -10,6 +11,14 @@ namespace Application.Questions.Commands
     {
         public int QuestionId { get; set; }
         public QuestionState QuestionState { get; set; }
+    }
+
+    public class EditQuestionStateCommandValidator : IRequestValidator<EditQuestionStateCommand>
+    {
+        public bool IsValid(EditQuestionStateCommand request)
+        {
+            return Validators.IsIdValid(request.QuestionId);
+        }
     }
 
     public class EditQuestionStateHandler : IRequestHandler<EditQuestionStateCommand>
