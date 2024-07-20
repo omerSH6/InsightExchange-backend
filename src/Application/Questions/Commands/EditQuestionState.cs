@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
 using Application.Common.Utils;
 using Domain.Entities;
@@ -21,13 +22,13 @@ namespace Application.Questions.Commands
         }
     }
 
-    public class EditQuestionStateHandler : IRequestHandler<EditQuestionStateCommand>
+    public class EditQuestionStateCommandHandler : IRequestHandler<EditQuestionStateCommand>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
 
-        public EditQuestionStateHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
+        public EditQuestionStateCommandHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;
@@ -42,7 +43,7 @@ namespace Application.Questions.Commands
             var user = await _userRepository.GetUserById(authenticatedUserId);
             if (user.Role != UserRole.Admin)
             {
-                throw new Exception($"User NOT authorized");
+                throw new UnauthorizedException();
             }
 
             await _questionRepository.EditQuestionState(request.QuestionId, request.QuestionState);

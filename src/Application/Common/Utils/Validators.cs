@@ -19,7 +19,7 @@
          
         public static bool IsTagsListToCreateValid(List<string> tagsList)
         {
-            return tagsList.Count < 10;
+            return tagsList.Count <= 10;
         }
 
         private static bool IsStringValid(string str)

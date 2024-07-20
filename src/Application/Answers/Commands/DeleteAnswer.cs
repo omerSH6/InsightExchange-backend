@@ -1,4 +1,5 @@
-﻿using Application.Common.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
 using Application.Common.Utils;
 using Domain.Enums;
@@ -19,13 +20,13 @@ namespace Application.Answers.Commands
         }
     }
 
-    public class DeleteAnswerHandler : IRequestHandler<DeleteAnswerCommand>
+    public class DeleteAnswerCommandHandler : IRequestHandler<DeleteAnswerCommand>
     {
         private readonly IAnswerRepository _answerRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
 
-        public DeleteAnswerHandler(IAnswerRepository answerRepository, IUserRepository userRepository, IUserService userService)
+        public DeleteAnswerCommandHandler(IAnswerRepository answerRepository, IUserRepository userRepository, IUserService userService)
         {
             _answerRepository = answerRepository;
             _userRepository = userRepository;
@@ -39,7 +40,7 @@ namespace Application.Answers.Commands
             var user = await _userRepository.GetUserById(authenticatedUserId);
             if (user.Role != UserRole.Admin)
             {
-                throw new Exception($"User NOT authorized");
+                throw new UnauthorizedException();
             }
 
             await _answerRepository.DeleteAnswer(request.AnswerId);

@@ -1,6 +1,4 @@
-﻿using Application.Common.Services.Mediator.Interfaces;
-
-namespace Application.Common.Services.Mediator
+﻿namespace Application.Common.Services.Mediator
 {
     public class RequestTypes
     {

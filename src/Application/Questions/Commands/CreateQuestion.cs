@@ -27,14 +27,14 @@ namespace Application.Questions.Commands
         }
     }
 
-    public class CreateQuestionHandler : IRequestHandler<CreateQuestionCommand, QuestionDTO>
+    public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionCommand, QuestionDTO>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         private readonly ITagRepository _tagRepository;
         private readonly IUserService _userService;
 
-        public CreateQuestionHandler(IQuestionRepository questionRepository, IUserRepository userRepository, ITagRepository tagRepository, IUserService userService)
+        public CreateQuestionCommandHandler(IQuestionRepository questionRepository, IUserRepository userRepository, ITagRepository tagRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;

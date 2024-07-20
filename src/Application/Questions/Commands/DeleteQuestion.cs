@@ -19,13 +19,13 @@ namespace Application.Questions.Commands
         }
     }
 
-    public class DeleteQuestionHandler : IRequestHandler<DeleteQuestionCommand>
+    public class DeleteQuestionCommandHandler : IRequestHandler<DeleteQuestionCommand>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
 
-        public DeleteQuestionHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
+        public DeleteQuestionCommandHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;

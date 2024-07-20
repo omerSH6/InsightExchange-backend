@@ -16,14 +16,14 @@ namespace WebApi.Controllers
 
 
         [HttpPost("question")]
-        public async Task<IActionResult> VoteQuestion([FromBody] CreateQuestionVote command)
+        public async Task<IActionResult> VoteQuestion([FromBody] CreateQuestionVoteCommand command)
         {
             await _mediator.Send(command);
             return Ok();
         }
 
         [HttpPost("answer")]
-        public async Task<IActionResult> VoteAnswer([FromBody] CreateAnswerVote command)
+        public async Task<IActionResult> VoteAnswer([FromBody] CreateAnswerVoteCommand command)
         {
             await _mediator.Send(command);
             return Ok();

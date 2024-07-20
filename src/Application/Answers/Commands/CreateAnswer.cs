@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTOs;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
 using Application.Common.Utils;
@@ -22,14 +23,14 @@ namespace Application.Answers.Commands
         }
     }
 
-    public class CreateAnswerHandler : IRequestHandler<CreateAnswerCommand, AnswerDTO>
+    public class CreateAnswerCommandHandler : IRequestHandler<CreateAnswerCommand, AnswerDTO>
     {
         private readonly IAnswerRepository _answerRepository;
         private readonly IUserRepository _userRepository;
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserService _userService;
 
-        public CreateAnswerHandler(IAnswerRepository answerRepository, IUserRepository userRepository, IQuestionRepository questionRepository, IUserService userService)
+        public CreateAnswerCommandHandler(IAnswerRepository answerRepository, IUserRepository userRepository, IQuestionRepository questionRepository, IUserService userService)
         {
             _answerRepository = answerRepository;
             _userRepository = userRepository;
@@ -45,7 +46,7 @@ namespace Application.Answers.Commands
 
             if (question == null)
             {
-                throw new Exception($"Question with id: {request.QuestionId} does not exist");
+                throw new OperationFailedException();
             }
 
             var answer = new Answer() 

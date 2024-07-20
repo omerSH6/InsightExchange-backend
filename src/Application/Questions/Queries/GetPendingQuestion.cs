@@ -10,24 +10,24 @@ namespace Application.Questions.Queries
 {
     public class GetPendingQuestionQuery : IRequest<QuestionDTO>
     {
-        public int Id { get; set; }
+        public int QuestionId { get; set; }
     }
 
     public class GetPendingQuestionQueryValidator : IRequestValidator<GetPendingQuestionQuery>
     {
         public bool IsValid(GetPendingQuestionQuery request)
         {
-            return Validators.IsIdValid(request.Id);
+            return Validators.IsIdValid(request.QuestionId);
         }
     }
 
-    public class GetPendingQuestionHandler : IRequestHandler<GetPendingQuestionQuery, QuestionDTO>
+    public class GetPendingQuestionQueryHandler : IRequestHandler<GetPendingQuestionQuery, QuestionDTO>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
 
-        public GetPendingQuestionHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
+        public GetPendingQuestionQueryHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;
@@ -36,7 +36,7 @@ namespace Application.Questions.Queries
 
         public async Task<QuestionDTO> Handle(GetPendingQuestionQuery request)
         {
-            var requestedQuestingId = request.Id;
+            var requestedQuestingId = request.QuestionId;
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var question = await _questionRepository.GetByIdAsync(requestedQuestingId, QuestionState.Pending);
 

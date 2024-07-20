@@ -25,13 +25,13 @@ namespace Application.Questions.Queries
         }
     }
 
-    public class GetQuestionsHandler : IRequestHandler<GetQuestionsQuery, List<QuestionPreviewDTO>>
+    public class GetQuestionsQueryHandler : IRequestHandler<GetQuestionsQuery, List<QuestionPreviewDTO>>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
 
-        public GetQuestionsHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
+        public GetQuestionsQueryHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;

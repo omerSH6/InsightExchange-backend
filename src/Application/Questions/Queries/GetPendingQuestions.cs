@@ -24,13 +24,13 @@ namespace Application.Questions.Queries
         }
     }
 
-    public class GetPendingQuestionsHandler : IRequestHandler<GetPendingQuestionsQuery, List<QuestionPreviewDTO>>
+    public class GetPendingQuestionsQueryHandler : IRequestHandler<GetPendingQuestionsQuery, List<QuestionPreviewDTO>>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
 
-        public GetPendingQuestionsHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
+        public GetPendingQuestionsQueryHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;

@@ -1,4 +1,5 @@
-﻿using Application.Common.Services.Mediator.Interfaces;
+﻿using Application.Common.Exceptions;
+using Application.Common.Services.Mediator.Interfaces;
 using Application.Common.Services.PasswordHash.Interfaces;
 using Application.Common.Utils;
 using Application.Questions.Commands;
@@ -25,12 +26,12 @@ namespace Application.Users.Commands
         }
     }
 
-    public class CreateUserHandler : IRequestHandler<CreateNewUserCommand>
+    public class CreateUserCommandHandler : IRequestHandler<CreateNewUserCommand>
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHashService _passwordHashService;
 
-        public CreateUserHandler(IUserRepository userRepository, IPasswordHashService passwordHashService)
+        public CreateUserCommandHandler(IUserRepository userRepository, IPasswordHashService passwordHashService)
         {
             _userRepository = userRepository;
             _passwordHashService = passwordHashService;
@@ -41,7 +42,7 @@ namespace Application.Users.Commands
             var user = await _userRepository.GetUserByUserNameAsync(request.UserName);
             if (user != null)
             {
-                throw new Exception("user with this user name already exist");
+                throw new OperationFailedException();
             }
 
             var passwordHash = _passwordHashService.HashPassword(request.Password);

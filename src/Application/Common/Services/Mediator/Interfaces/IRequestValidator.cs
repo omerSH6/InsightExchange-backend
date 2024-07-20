@@ -1,7 +1,7 @@
 ﻿namespace Application.Common.Services.Mediator.Interfaces
 {
-    public interface IRequestValidator<TCommand>
+    public interface IRequestValidator<TRequest>
     {
-        public bool IsValid(TCommand request);
+        public bool IsValid(TRequest request);
     }
 }

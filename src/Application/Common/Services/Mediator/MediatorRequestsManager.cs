@@ -9,7 +9,7 @@ namespace Application.Common.Services.Mediator
         public static IMediatorRequestsManager Instance = new MediatorRequestsManager();
         
         private readonly List<RequestTypes> _requestTypes = new List<RequestTypes>();
-        public MediatorRequestsManager()
+        private MediatorRequestsManager()
         {
             LoadRequestHandlers();
         }

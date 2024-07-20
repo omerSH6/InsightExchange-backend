@@ -4,32 +4,33 @@ using Application.Common.Services.Mediator.Interfaces;
 using Domain.Enums;
 using Application.Common.Interfaces;
 using Application.Common.Utils;
+using Application.Common.Exceptions;
 
 namespace Application.Questions.Commands
 {
-    public class CreateQuestionVote : IRequest
+    public class CreateQuestionVoteCommand : IRequest
     {
         public int QuestionId { get; set; }
         public bool IsPositiveVote { get; set; }
     }
 
 
-    public class CreateQuestionVoteValidator : IRequestValidator<CreateQuestionVote>
+    public class CreateQuestionVoteCommandValidator : IRequestValidator<CreateQuestionVoteCommand>
     {
-        public bool IsValid(CreateQuestionVote request)
+        public bool IsValid(CreateQuestionVoteCommand request)
         {
             return Validators.IsIdValid(request.QuestionId);
         }
     }
 
-    public class CreateQuestionVoteHandler : IRequestHandler<CreateQuestionVote>
+    public class CreateQuestionVoteCommandHandler : IRequestHandler<CreateQuestionVoteCommand>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IQuestionVoteRepository _questionVoteRepository;
         private readonly IUserService _userService;
 
-        public CreateQuestionVoteHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IQuestionVoteRepository questionVoteRepository, IUserService userService)
+        public CreateQuestionVoteCommandHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IQuestionVoteRepository questionVoteRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;
@@ -37,7 +38,7 @@ namespace Application.Questions.Commands
             _userService = userService;
         }
 
-        public async Task Handle(CreateQuestionVote request)
+        public async Task Handle(CreateQuestionVoteCommand request)
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
@@ -45,7 +46,7 @@ namespace Application.Questions.Commands
 
             if (question == null)
             {
-                throw new Exception($"Question with id: {request.QuestionId} does not exist");
+                throw new OperationFailedException();
             }
 
             if (question.Votes.Any(v=>v.UserId == user.Id))

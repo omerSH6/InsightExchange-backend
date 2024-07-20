@@ -9,24 +9,24 @@ namespace Application.Questions.Queries
 {
     public class GetQuestionQuery : IRequest<QuestionDTO>
     {
-        public int Id { get; set; }
+        public int QuestionId { get; set; }
     }
 
     public class GetQuestionQueryValidator : IRequestValidator<GetQuestionQuery>
     {
         public bool IsValid(GetQuestionQuery request)
         {
-            return Validators.IsIdValid(request.Id);
+            return Validators.IsIdValid(request.QuestionId);
         }
     }
 
-    public class GetQuestionHandler : IRequestHandler<GetQuestionQuery, QuestionDTO>
+    public class GetQuestionQueryHandler : IRequestHandler<GetQuestionQuery, QuestionDTO>
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IUserRepository _userRepository;
         private readonly IUserService _userService;
 
-        public GetQuestionHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
+        public GetQuestionQueryHandler(IQuestionRepository questionRepository, IUserRepository userRepository, IUserService userService)
         {
             _questionRepository = questionRepository;
             _userRepository = userRepository;
@@ -35,7 +35,7 @@ namespace Application.Questions.Queries
 
         public async Task<QuestionDTO> Handle(GetQuestionQuery request)
         {
-            var requestedQuestingId = request.Id;
+            var requestedQuestingId = request.QuestionId;
             var authenticatedUserId = _userService.GetAuthenticatedUserIfExist();
             var question = await _questionRepository.GetByIdAsync(requestedQuestingId, QuestionState.Approved);
 

@@ -1,4 +1,5 @@
 ﻿using Application.Common.DTOs;
+using Application.Common.Exceptions;
 using Application.Common.Interfaces;
 using Application.Common.Services.Mediator.Interfaces;
 using Application.Common.Services.PasswordHash.Interfaces;
@@ -29,28 +30,28 @@ namespace Application.Users.Commands
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHashService _passwordHashService;
-        private readonly ITokenProvider _jwtProvider;
+        private readonly ITokenProvider _tokenProvider;
 
         public UserLoginCommandHandler(IUserRepository userRepository, IPasswordHashService passwordHashService, ITokenProvider jwtProvider)
         {
             _userRepository = userRepository;
             _passwordHashService = passwordHashService;
-            _jwtProvider = jwtProvider;
+            _tokenProvider = jwtProvider;
         }
 
         public async Task<UserLoginTokenDTO> Handle(UserLoginCommand request)
         {
-            var user = await _userRepository.GetUserByEmailAsync(request.Email);
+            var user = await _userRepository.GetUserByUserNameAsync(request.UserName);
             if (user == null)
             {
-                throw new Exception("user not exist");
+                throw new OperationFailedException();
             }
 
             if(_passwordHashService.VerifyPasswordHash(request.Password, user.PasswordHash))
             {
                 var UserLoginTokenDTO = new UserLoginTokenDTO()
                 {
-                    LoginToken = _jwtProvider.Generate(user),
+                    LoginToken = _tokenProvider.Generate(user),
                     UserName = user.UserName,
                     Role = user.Role.ToString(),
                     UserId = user.Id
