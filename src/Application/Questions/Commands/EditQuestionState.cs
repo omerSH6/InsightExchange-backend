@@ -40,7 +40,7 @@ namespace Application.Questions.Commands
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var question = await _questionRepository.GetByIdAsync(request.QuestionId);
             var originalQuestionState = question.State;
-            var user = await _userRepository.GetUserById(authenticatedUserId);
+            var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
             if (user.Role != UserRole.Admin)
             {
                 throw new UnauthorizedException();

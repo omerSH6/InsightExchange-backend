@@ -40,7 +40,7 @@ namespace Application.Questions.Queries
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
             var question = await _questionRepository.GetByIdAsync(requestedQuestingId, QuestionState.Pending);
 
-            var user = await _userRepository.GetUserById(authenticatedUserId);
+            var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
             if (user.Role != UserRole.Admin)
             {
                 throw new Exception($"User NOT authorized");

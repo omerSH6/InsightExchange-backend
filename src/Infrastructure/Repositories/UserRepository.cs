@@ -26,16 +26,6 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<User> GetUserByEmailAsync(string email)
-        {
-            return await _context.Users.Where(user => user.Email.Equals(email)).FirstOrDefaultAsync();
-        }
-
-        public async Task<User> GetUserById(int id)
-        {
-            return await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();
-        }
-
         public async Task<User> GetUserByIdAsync(int id)
         {
             return await _context.Users.Where(user => user.Id == id).FirstOrDefaultAsync();

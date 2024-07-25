@@ -35,15 +35,15 @@ namespace WebApi.Controllers
             return Ok();
         }
 
-        [HttpGet("deleteQuestion")]
-        public async Task<ActionResult<List<QuestionPreviewDTO>>> DeleteQuestion([FromBody] DeleteQuestionCommand command)
+        [HttpPost("deleteQuestion")]
+        public async Task<ActionResult> DeleteQuestion([FromBody] DeleteQuestionCommand command)
         {
             await _mediator.Send(command);
             return Ok();
         }
         
-        [HttpGet("deleteAnswer")]
-        public async Task<ActionResult<List<QuestionPreviewDTO>>> DeleteAnswer([FromBody] DeleteAnswerCommand command)
+        [HttpPost("deleteAnswer")]
+        public async Task<ActionResult> DeleteAnswer([FromBody] DeleteAnswerCommand command)
         {
             await _mediator.Send(command);
             return Ok();

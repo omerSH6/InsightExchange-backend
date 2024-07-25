@@ -36,7 +36,7 @@ namespace Application.Questions.Commands
         {
             var authenticatedUserId = _userService.GetAuthenticatedUserId();
 
-            var user = await _userRepository.GetUserById(authenticatedUserId);
+            var user = await _userRepository.GetUserByIdAsync(authenticatedUserId);
             if (user.Role != UserRole.Admin)
             {
                 throw new Exception($"User NOT authorized");

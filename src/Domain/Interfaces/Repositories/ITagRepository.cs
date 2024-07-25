@@ -4,8 +4,8 @@ namespace Domain.Interfaces.Repositories
 {
     public interface ITagRepository
     {
-        public Task CreateTagAsync(string tagName);
-        public Task<List<Tag>> GetAllTagsAsync();
-        public Task<List<Tag>> GetByNamesAsync(List<string> names);
+       Task CreateTagAsync(string tagName);
+       Task<List<Tag>> GetAllTagsAsync();
+       Task<List<Tag>> GetByNamesAsync(List<string> names);
     }
 }
