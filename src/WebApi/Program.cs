@@ -5,7 +5,7 @@ using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using WebApi.Authentication;
-using WebApi.Middleware;
+using WebApi.Middleware.ExceptionHandling;
 
 var builder = WebApplication.CreateBuilder(args);
 
